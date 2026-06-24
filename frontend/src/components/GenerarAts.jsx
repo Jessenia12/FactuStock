@@ -650,7 +650,7 @@ const GenerarAts = () => {
                   <span style={{ fontSize: '0.86rem', fontWeight: '900', color: ACCENT, textAlign: 'right' }}>{fmtMoney(ventas.reduce((s, v) => s + v.total, 0))}</span>
                 </div>
               </div>
-              </div>{/* cierre overflowX ventas */}
+              </div>
             )}
           </div>
         </div>
@@ -714,7 +714,7 @@ const GenerarAts = () => {
                   <span style={{ fontSize: '0.86rem', fontWeight: '900', color: '#10b981', textAlign: 'right' }}>{fmtMoney(compras.reduce((s, c) => s + c.total, 0))}</span>
                 </div>
               </div>
-              </div>{/* cierre overflowX compras */}
+              </div>
             )}
           </div>
         </div>
