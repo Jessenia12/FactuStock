@@ -360,19 +360,20 @@ const DOCUMENTOS = [
 
 const VistaDocumentos = ({ onSeleccionar, onCerrar }) => {
   const [hovered, setHovered] = useState(null);
+  const isMob = window.innerWidth < 768;
   return (
-    <div style={{ padding: '2.5rem 3rem', animation: 'fadeUp 0.3s ease both' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '2.2rem' }}>
+    <div style={{ padding: isMob ? '1.2rem 1rem' : '2.5rem 3rem', animation: 'fadeUp 0.3s ease both' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: isMob ? '1rem' : '2.2rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.55rem', fontWeight: '800', color: '#0f172a', margin: '0 0 0.3rem', letterSpacing: '-0.4px' }}>Nuevo Documento</h2>
-          <p style={{ fontSize: '0.875rem', color: '#94a3b8', margin: 0, fontWeight: '500' }}>Selecciona el tipo de comprobante que deseas emitir</p>
+          <h2 style={{ fontSize: isMob ? '1.05rem' : '1.55rem', fontWeight: '800', color: '#0f172a', margin: '0 0 0.3rem', letterSpacing: '-0.4px' }}>Nuevo Documento</h2>
+          <p style={{ fontSize: isMob ? '0.74rem' : '0.875rem', color: '#94a3b8', margin: 0, fontWeight: '500' }}>Selecciona el tipo de comprobante que deseas emitir</p>
         </div>
         <button onClick={onCerrar} style={{ background: '#f1f5f9', border: 'none', borderRadius: '12px', width: '40px', height: '40px', cursor: 'pointer', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b', transition: 'all 0.15s' }}
           onMouseEnter={e => { e.currentTarget.style.background = '#e2e8f0'; }} onMouseLeave={e => { e.currentTarget.style.background = '#f1f5f9'; }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
         </button>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: isMob ? '0.5rem' : '1.2rem' }}>
         {DOCUMENTOS.map((doc, i) => {
           const isHov = hovered === doc.id;
           return (
@@ -380,16 +381,18 @@ const VistaDocumentos = ({ onSeleccionar, onCerrar }) => {
               onMouseEnter={() => doc.disponible && setHovered(doc.id)}
               onMouseLeave={() => setHovered(null)}
               onClick={() => doc.disponible && onSeleccionar(doc.id)}
-              style={{ background: isHov ? `linear-gradient(150deg,#fff,${doc.colorBg})` : '#fff', borderRadius: '20px', padding: '2rem 1.75rem 1.8rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', cursor: doc.disponible ? 'pointer' : 'default', border: `1.5px solid ${isHov ? doc.colorAccent + '55' : '#e8edf3'}`, boxShadow: isHov ? `0 20px 48px ${doc.color}1a` : '0 2px 8px rgba(15,23,42,0.05)', transform: isHov ? 'translateY(-7px) scale(1.015)' : 'translateY(0) scale(1)', transition: 'all 0.26s cubic-bezier(0.34,1.45,0.64,1)', position: 'relative', overflow: 'hidden', animation: `fadeUp 0.45s ease ${i * 0.06}s both`, minHeight: '200px' }}>
-              <div style={{ position: 'absolute', top: '-28px', right: '-28px', width: '110px', height: '110px', borderRadius: '50%', background: isHov ? doc.colorBg : '#f8fafc', opacity: isHov ? 0.6 : 0.4, transition: 'all 0.3s', pointerEvents: 'none' }} />
-              <div style={{ width: '74px', height: '74px', borderRadius: '18px', background: isHov ? doc.colorBg : '#f4f7fb', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem', flexShrink: 0, transform: isHov ? 'scale(1.1) rotate(-2deg)' : 'scale(1)', transition: 'all 0.28s cubic-bezier(0.34,1.45,0.64,1)', position: 'relative', zIndex: 1 }}>{doc.icon}</div>
+              style={{ background: isHov ? `linear-gradient(150deg,#fff,${doc.colorBg})` : '#fff', borderRadius: isMob ? '12px' : '20px', padding: isMob ? '0.75rem 0.5rem 0.7rem' : '2rem 1.75rem 1.8rem', display: 'flex', flexDirection: 'column', alignItems: isMob ? 'center' : 'flex-start', textAlign: isMob ? 'center' : 'left', cursor: doc.disponible ? 'pointer' : 'default', border: `1.5px solid ${isHov ? doc.colorAccent + '55' : '#e8edf3'}`, boxShadow: isHov ? `0 20px 48px ${doc.color}1a` : '0 2px 8px rgba(15,23,42,0.05)', transform: isHov ? 'translateY(-7px) scale(1.015)' : 'translateY(0) scale(1)', transition: 'all 0.26s cubic-bezier(0.34,1.45,0.64,1)', position: 'relative', overflow: 'hidden', animation: `fadeUp 0.45s ease ${i * 0.06}s both`, minHeight: isMob ? 'auto' : '200px' }}>
+              {!isMob && <div style={{ position: 'absolute', top: '-28px', right: '-28px', width: '110px', height: '110px', borderRadius: '50%', background: isHov ? doc.colorBg : '#f8fafc', opacity: isHov ? 0.6 : 0.4, transition: 'all 0.3s', pointerEvents: 'none' }} />}
+              <div style={{ width: isMob ? '42px' : '74px', height: isMob ? '42px' : '74px', borderRadius: isMob ? '10px' : '18px', background: isHov ? doc.colorBg : '#f4f7fb', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: isMob ? '0.45rem' : '1.25rem', flexShrink: 0, transform: isHov ? 'scale(1.1) rotate(-2deg)' : 'scale(1)', transition: 'all 0.28s cubic-bezier(0.34,1.45,0.64,1)', position: 'relative', zIndex: 1, overflow: 'hidden' }}>
+                {isMob ? <div style={{ transform: 'scale(0.6)', transformOrigin: 'center', lineHeight: 0 }}>{doc.icon}</div> : doc.icon}
+              </div>
               <div style={{ position: 'relative', zIndex: 1, flex: 1, width: '100%' }}>
-                <div style={{ fontSize: '1.02rem', fontWeight: '800', lineHeight: 1.25, color: isHov ? doc.color : '#0f172a', marginBottom: '0.4rem', transition: 'color 0.2s' }}>{doc.label}</div>
-                <div style={{ fontSize: '0.79rem', fontWeight: '500', color: '#94a3b8', lineHeight: 1.5 }}>{doc.descripcion}</div>
+                <div style={{ fontSize: isMob ? '0.65rem' : '1.02rem', fontWeight: '800', lineHeight: 1.25, color: isHov ? doc.color : '#0f172a', marginBottom: isMob ? '0.2rem' : '0.4rem', transition: 'color 0.2s' }}>{doc.label}</div>
+                <div style={{ fontSize: isMob ? '0.58rem' : '0.79rem', fontWeight: '500', color: '#94a3b8', lineHeight: 1.4 }}>{doc.descripcion}</div>
               </div>
-              <div style={{ position: 'absolute', bottom: '1.4rem', right: '1.4rem', width: '34px', height: '34px', borderRadius: '50%', background: doc.color, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: isHov ? 1 : 0, transform: isHov ? 'scale(1)' : 'scale(0.6)', transition: 'all 0.24s cubic-bezier(0.34,1.45,0.64,1)', zIndex: 2 }}>
+              {!isMob && <div style={{ position: 'absolute', bottom: '1.4rem', right: '1.4rem', width: '34px', height: '34px', borderRadius: '50%', background: doc.color, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: isHov ? 1 : 0, transform: isHov ? 'scale(1)' : 'scale(0.6)', transition: 'all 0.24s cubic-bezier(0.34,1.45,0.64,1)', zIndex: 2 }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
-              </div>
+              </div>}
             </div>
           );
         })}
