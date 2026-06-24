@@ -26,7 +26,7 @@ import Perfil from './Perfil';
 
 const BG = '#f1f5f9';
 const SIDEBAR_FULL = 235;
-const API_BASE = 'http://localhost:8000';
+const API_BASE = 'https://factustock-efdi.onrender.com';
 const API = `${API_BASE}/api`;
 const getToken = () => localStorage.getItem('token');
 
@@ -791,7 +791,7 @@ const Dashboard = () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) return;
-        const r = await fetch('http://localhost:8000/api/negocio/', {
+        const r = await fetch('https://factustock-efdi.onrender.com/api/negocio/', {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (r.ok) {
@@ -806,7 +806,7 @@ const Dashboard = () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) return;
-        const r = await fetch('http://localhost:8000/api/docente/mis-modulos', {
+        const r = await fetch('https://factustock-efdi.onrender.com/api/docente/mis-modulos', {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (r.ok) {

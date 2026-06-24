@@ -6,7 +6,7 @@ import { AppContext } from '../context/AppContext';
 /* ════════════════════════════════════════════════════════
    CONSTANTES GLOBALES
 ════════════════════════════════════════════════════════ */
-const API          = 'http://localhost:8000';
+const API          = 'https://factustock-efdi.onrender.com';
 const BLUE         = '#0f1f4b';
 const BLUE_MID     = '#15389a';
 const BLUE_LIGHTER = '#eff6ff';

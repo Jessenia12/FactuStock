@@ -5,8 +5,8 @@ import React, { useState, useEffect, useCallback } from 'react';
    Tickets de soporte + Solicitudes de recuperación de contraseña
 ══════════════════════════════════════════════════════════ */
 
-const API     = 'http://localhost:8000/api';
-const API_AUTH= 'http://localhost:8000/api/auth';
+const API     = 'https://factustock-efdi.onrender.com/api';
+const API_AUTH= 'https://factustock-efdi.onrender.com/api/auth';
 const tok     = () => localStorage.getItem('token');
 const hdrs    = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${tok()}` });
 

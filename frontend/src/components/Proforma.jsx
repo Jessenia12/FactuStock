@@ -16,7 +16,7 @@ import ReactDOM from 'react-dom';
 /* ════════════════════════════════════════════════════════
    CONSTANTES GLOBALES — API, colores, helpers
 ════════════════════════════════════════════════════════ */
-const API_BASE = 'http://localhost:8000';
+const API_BASE = 'https://factustock-efdi.onrender.com';
 const API      = `${API_BASE}/api`;
 const getToken = () => localStorage.getItem('token');
 const hdrs     = () => ({

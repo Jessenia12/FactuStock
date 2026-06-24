@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
    Actividad del curso y estadísticas para el docente
 ══════════════════════════════════════════════════════════ */
 
-const API = 'http://localhost:8000/api';
+const API = 'https://factustock-efdi.onrender.com/api';
 const tok = () => localStorage.getItem('token');
 const hdrs = () => ({ Authorization: `Bearer ${tok()}` });
 

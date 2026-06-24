@@ -4,7 +4,7 @@ import { User, Lock, Eye, EyeOff, X, AlertCircle, CheckCircle, Loader, Mail } fr
 import { authService } from '../services/api';
 import loginIllustration from '../assets/login-illustration.png';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://factustock-efdi.onrender.com';
 
 /* ══════════════════════════════════════════════
    PANEL IZQUIERDO ANIMADO

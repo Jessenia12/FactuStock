@@ -93,7 +93,7 @@ const PASOS = [
 ];
 
 // ─── PrintView SRI ─────────────────────────────────────────
-const API_BASE_PRINT = 'http://localhost:8000';
+const API_BASE_PRINT = 'https://factustock-efdi.onrender.com';
 const buildLogoUrl = (url) => {
   if (!url) return null;
   const base = url.startsWith('http') ? url : `${API_BASE_PRINT}${url}`;
@@ -243,7 +243,7 @@ const NuevaFactura = ({ onVolver, logoNegocio }) => {
   ]);
   React.useEffect(()=>{
     const token=localStorage.getItem('token');
-    fetch('http://localhost:8000/api/tarifas-iva/?solo_activas=true',{headers:{Authorization:`Bearer ${token}`}})
+    fetch('https://factustock-efdi.onrender.com/api/tarifas-iva/?solo_activas=true',{headers:{Authorization:`Bearer ${token}`}})
       .then(r=>r.ok?r.json():null)
       .then(data=>{if(data&&data.length>0)setTarifasIVA(data.map(t=>({valor:parseFloat(t.porcentaje),label:t.etiqueta,descripcion:t.descripcion})));})
       .catch(()=>{});

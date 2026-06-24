@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx';
    DocEstudiantes.jsx — con Tabs Activos/Inactivos + Paginación
 ══════════════════════════════════════════════════════════ */
 
-const API = 'http://localhost:8000/api';
+const API = 'https://factustock-efdi.onrender.com/api';
 const tok = () => localStorage.getItem('token');
 const hdrs = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${tok()}` });
 

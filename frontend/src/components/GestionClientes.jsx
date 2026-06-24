@@ -13,7 +13,7 @@ const _getTourKey_CLI = (uid) => `cli_tour_visto_${uid || 'default'}`;
 
 
 
-const API = 'http://localhost:8000/api';
+const API = 'https://factustock-efdi.onrender.com/api';
 const getToken = () => localStorage.getItem('token');
 
 const TIPO_ID = ['CEDULA', 'RUC', 'PASAPORTE'];

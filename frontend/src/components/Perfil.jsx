@@ -11,7 +11,7 @@ const _getTourKey_PERF = (uid) => `perf_tour_visto_${uid || 'default'}`;
 
 
 
-const API = 'http://localhost:8000/api';
+const API = 'https://factustock-efdi.onrender.com/api';
 const getToken = () => localStorage.getItem('token');
 const hdrs = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
 const hdrsMultipart = () => ({ Authorization: `Bearer ${getToken()}` });
@@ -114,7 +114,7 @@ const AvatarUploader = ({ initials, fotoUrl, onFotoActualizada }) => {
     if (fotoUrl) {
       const base = fotoUrl.startsWith('http')
         ? fotoUrl
-        : `http://localhost:8000${fotoUrl}`;
+        : `https://factustock-efdi.onrender.com${fotoUrl}`;
       setPreview(`${base}?t=${Date.now()}`);
     } else {
       setPreview(null);
@@ -151,14 +151,14 @@ const AvatarUploader = ({ initials, fotoUrl, onFotoActualizada }) => {
       // ✅ FIX 3: Una vez confirmado el servidor, actualizar con URL real + cache-bust
       const base = data.foto_url.startsWith('http')
         ? data.foto_url
-        : `http://localhost:8000${data.foto_url}`;
+        : `https://factustock-efdi.onrender.com${data.foto_url}`;
       setPreview(`${base}?t=${Date.now()}`);
       if (onFotoActualizada) onFotoActualizada(data.foto_url);
     } catch (err) {
       setUploadErr(err.message);
       // Revertir al estado anterior si falla
       if (fotoUrl) {
-        const base = fotoUrl.startsWith('http') ? fotoUrl : `http://localhost:8000${fotoUrl}`;
+        const base = fotoUrl.startsWith('http') ? fotoUrl : `https://factustock-efdi.onrender.com${fotoUrl}`;
         setPreview(`${base}?t=${Date.now()}`);
       } else {
         setPreview(null);

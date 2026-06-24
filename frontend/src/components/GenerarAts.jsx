@@ -264,7 +264,7 @@ const GenerarAts = () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token') || '';
       const resp = await fetch(
-        `http://localhost:8000/api/ats/generar-xml?anio=${anio}&mes=${mes}`,
+        `https://factustock-efdi.onrender.com/api/ats/generar-xml?anio=${anio}&mes=${mes}`,
         { headers: { Authorization: `Bearer ${token}` } },
       );
       if (!resp.ok) throw new Error('Error al generar XML');

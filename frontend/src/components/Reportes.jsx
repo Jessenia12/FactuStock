@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { reportesService } from '../services/api';
 import * as XLSX from 'xlsx';
 
-const API      = 'http://localhost:8000/api';
+const API      = 'https://factustock-efdi.onrender.com/api';
 const getToken = () => localStorage.getItem('token');
 
 // ── helpers ──────────────────────────────────────────────────────────────────

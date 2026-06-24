@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 
-const API    = 'http://localhost:8000/api';
+const API    = 'https://factustock-efdi.onrender.com/api';
 const getToken = () => localStorage.getItem('token');
 const hdrs   = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` });
 

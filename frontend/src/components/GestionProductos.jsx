@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 const _getTourKey_PROD = (uid) => `prod_tour_visto_${uid || 'default'}`;
 
-const API      = 'http://localhost:8000/api';
+const API      = 'https://factustock-efdi.onrender.com/api';
 const getToken = () => localStorage.getItem('token');
 
 const BLUE     = '#15389a';

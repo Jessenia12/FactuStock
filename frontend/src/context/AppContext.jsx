@@ -10,7 +10,7 @@
 // ─────────────────────────────────────────────────────────
 import React, { createContext, useState, useEffect } from 'react';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = 'https://factustock-efdi.onrender.com';
 const getToken = () => localStorage.getItem('token');
 
 export const AppContext = createContext({

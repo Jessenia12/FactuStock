@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { authService } from '../services/api';
 
-const API      = 'http://localhost:8000/api';
+const API      = 'https://factustock-efdi.onrender.com/api';
 const getToken = () => localStorage.getItem('token');
 const getTourKey = (userId) => `ayuda_tour_visto_${userId || 'default'}`;
 const EDU_BG     = '#f0f7ff';
@@ -254,7 +254,7 @@ const AyudaSoporte = () => {
     setCargandoTickets(true);
     try {
       const token = localStorage.getItem('token');
-      const r = await fetch('http://localhost:8000/api/docente/mis-tickets', {
+      const r = await fetch('https://factustock-efdi.onrender.com/api/docente/mis-tickets', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (r.ok) { const d = await r.json(); setMisTickets(d.tickets || []); }

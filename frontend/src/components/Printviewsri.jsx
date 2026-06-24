@@ -11,7 +11,7 @@
 // ════════════════════════════════════════════════════════
 import React from 'react';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = 'https://factustock-efdi.onrender.com';
 
 const fmt   = (v) => parseFloat(v || 0).toFixed(2);
 const fecha = (s) => { if (!s) return '—'; const [y,m,d] = s.split('-'); return `${d}/${m}/${y}`; };

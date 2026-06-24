@@ -7,7 +7,7 @@ import React, { useState, useEffect, useCallback } from 'react';
    independiente en el sidebar del docente.
 ══════════════════════════════════════════════════════════ */
 
-const API = 'http://localhost:8000/api';
+const API = 'https://factustock-efdi.onrender.com/api';
 const hdrs = () => ({
   'Content-Type': 'application/json',
   Authorization: `Bearer ${localStorage.getItem('token')}`,

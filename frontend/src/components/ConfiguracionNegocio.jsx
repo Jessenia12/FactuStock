@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { negocioService } from '../services/api';
 import { AppContext } from '../context/AppContext';
 
-const API      = 'http://localhost:8000/api';
-const API_BASE = 'http://localhost:8000';
+const API      = 'https://factustock-efdi.onrender.com/api';
+const API_BASE = 'https://factustock-efdi.onrender.com';
 const getToken = () => localStorage.getItem('token');
 
 // ── Paleta ────────────────────────────────────────────────
