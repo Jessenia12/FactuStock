@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 /* ══════════════════════════════════════════════════════════
    DocTickets.jsx
@@ -480,6 +481,7 @@ const SeccionRecuperaciones = () => {
    COMPONENTE PRINCIPAL
 ══════════════════════════════════════════════════════════ */
 const DocTickets = () => {
+  const isMobile = useIsMobile();
   const [tickets, setTickets]         = useState([]);
   const [vista, setVista]             = useState('tickets');
   const getTourKey = () => {
@@ -507,7 +509,7 @@ const DocTickets = () => {
   const pendientes = tickets.filter(t => t.estado === 'pendiente').length;
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+    <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '1rem 0.85rem' : '1.8rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
 
       {!tourVisto && (
         <TourDocente

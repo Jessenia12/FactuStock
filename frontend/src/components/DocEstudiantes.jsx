@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import * as XLSX from 'xlsx';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 /* ══════════════════════════════════════════════════════════
    DocEstudiantes.jsx — con Tabs Activos/Inactivos + Paginación
@@ -451,7 +452,7 @@ const TablaEstudiantes = ({ lista, onEditar, onToggleEstado, onModulos, onElimin
     <>
       {paginados.map((e, i) => (
         <div key={e.id_usuario}
-          style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1fr 0.8fr 160px', padding: '0.82rem 1.2rem', alignItems: 'center', borderBottom: i < paginados.length - 1 ? '1px solid #f8fafc' : 'none', transition: 'background 0.1s' }}
+          style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1fr 0.8fr 160px', padding: '0.82rem 1.2rem', alignItems: 'center', borderBottom: i < paginados.length - 1 ? '1px solid #f8fafc' : 'none', transition: 'background 0.1s', minWidth: '580px' }}
           onMouseEnter={ev => ev.currentTarget.style.background = '#f8fafc'}
           onMouseLeave={ev => ev.currentTarget.style.background = 'transparent'}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
@@ -503,6 +504,7 @@ const TablaEstudiantes = ({ lista, onEditar, onToggleEstado, onModulos, onElimin
    COMPONENTE PRINCIPAL
 ══════════════════════════════════════════════════════════ */
 const DocEstudiantes = () => {
+  const isMobile = useIsMobile();
   const [estudiantes, setEstudiantes] = useState([]);
   const [tabActiva, setTabActiva] = useState('activos'); // 'activos' | 'inactivos'
 
@@ -580,7 +582,7 @@ const DocEstudiantes = () => {
   });
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+    <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '1rem 0.85rem' : '1.8rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
 
       {/* Tour */}
       {!tourVisto && (
@@ -661,7 +663,8 @@ const DocEstudiantes = () => {
       ) : (
         <div style={{ background: 'white', borderRadius: tabActiva === 'activos' ? '0 16px 16px 16px' : '16px 16px 16px 16px', border: '1px solid #e2e8f0', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
           {/* Cabecera de columnas */}
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1fr 0.8fr 160px', padding: '0.55rem 1.2rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
+          <div style={{ overflowX: 'auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr 1fr 0.8fr 160px', padding: '0.55rem 1.2rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9', minWidth: '580px' }}>
             {['Estudiante', 'Email', 'Curso', 'Estado', 'Acciones'].map(h => (
               <span key={h} style={{ fontSize: '0.67rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{h}</span>
             ))}
@@ -692,6 +695,7 @@ const DocEstudiantes = () => {
               onEliminar={setConfirmElim}
             />
           )}
+          </div>{/* cierre overflowX */}
         </div>
       )}
 

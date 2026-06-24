@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const API    = 'https://factustock-efdi.onrender.com/api';
 const getToken = () => localStorage.getItem('token');
@@ -170,6 +171,7 @@ const LiquidacionesCompras = ({ onVolver }) => {
 // FORMULARIO NUEVO
 // ════════════════════════════════════════════════════════
 const FormNueva = ({ onGuardado, onVolver }) => {
+  const isMobile = useIsMobile();
   const [paso,         setPaso]         = useState(1);
   const [busqueda,     setBusqueda]     = useState('');
   const [proveedores,  setProveedores]  = useState([]);
@@ -299,7 +301,7 @@ const FormNueva = ({ onGuardado, onVolver }) => {
   // ── Pantalla de éxito ──────────────────────────────────
   if (paso === 3 && resultado) {
     return (
-      <div style={{ padding:'1.8rem 2rem', fontFamily:"'Nunito','Segoe UI',sans-serif" }}>
+      <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.8rem 2rem', fontFamily:"'Nunito','Segoe UI',sans-serif" }}>
         <BarraContexto />
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'4rem 2rem', textAlign:'center', gap:'1rem' }}>
           <div style={{ width:'72px', height:'72px', borderRadius:'50%', background:`linear-gradient(135deg,${ROSADO.primary},${ROSADO.mid})`, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:'0.5rem' }}>
@@ -364,7 +366,7 @@ const FormNueva = ({ onGuardado, onVolver }) => {
             </div>
 
             <div style={{ border:'1px solid #f1f5f9', borderRadius:'12px', overflow:'hidden' }}>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 160px 90px', padding:'0.5rem 1rem', background:'#f8fafc', borderBottom:'1px solid #f1f5f9' }}>
+              <div style={{ overflowX: 'auto' }}><div style={{ display:'grid', gridTemplateColumns:'1fr 160px 90px', padding:'0.5rem 1rem', background:'#f8fafc', borderBottom:'1px solid #f1f5f9', minWidth: '360px' }}>
                 {['Nombre / Razón social','Identificación','Acción'].map(c=>(
                   <span key={c} style={{ fontSize:'0.68rem', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase' }}>{c}</span>
                 ))}
@@ -377,7 +379,7 @@ const FormNueva = ({ onGuardado, onVolver }) => {
                 </div>
               ) : proveedores.map((p,i) => (
                 <div key={p.id_persona_comercial}
-                  style={{ display:'grid', gridTemplateColumns:'1fr 160px 90px', padding:'0.75rem 1rem', alignItems:'center', borderBottom:i<proveedores.length-1?'1px solid #f8fafc':'none', transition:'background 0.12s' }}
+                  style={{ display:'grid', gridTemplateColumns:'1fr 160px 90px', padding:'0.75rem 1rem', alignItems:'center', borderBottom:i<proveedores.length-1?'1px solid #f8fafc':'none', transition:'background 0.12s', minWidth: '360px' }}
                   onMouseEnter={e=>e.currentTarget.style.background='#f8fafc'}
                   onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
                   <div>
@@ -393,14 +395,14 @@ const FormNueva = ({ onGuardado, onVolver }) => {
                   </button>
                 </div>
               ))}
-            </div>
+            </div></div>{/* cierre overflowX */}
           </div>
         </div>
       )}
 
       {/* PASO 2: Ítems */}
       {paso === 2 && proveedor && (
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 320px', gap:'1.2rem', alignItems:'start' }}>
+        <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 320px', gap:'1.2rem', alignItems:'start' }}>
           <div style={{ display:'flex', flexDirection:'column', gap:'1.1rem' }}>
             {/* Proveedor seleccionado */}
             <div style={{ background:AZUL.lighter, border:`1.5px solid ${AZUL.border}`, borderRadius:'14px', padding:'1rem 1.2rem', display:'flex', gap:'2rem', alignItems:'center', flexWrap:'wrap' }}>
@@ -430,14 +432,14 @@ const FormNueva = ({ onGuardado, onVolver }) => {
                   + Agregar ítem
                 </button>
               </div>
-              <div style={{ padding:'1rem 1.2rem', display:'flex', flexDirection:'column', gap:'0.65rem' }}>
-                <div style={{ display:'grid', gridTemplateColumns:'1fr 80px 110px 80px 100px 36px', gap:'0.6rem', padding:'0 0.1rem' }}>
+              <div style={{ padding:'1rem 1.2rem', display:'flex', flexDirection:'column', gap:'0.65rem', overflowX:'auto' }}>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 80px 110px 80px 100px 36px', gap:'0.6rem', padding:'0 0.1rem', minWidth: '500px' }}>
                   {['Descripción','Cant.','Precio unit.','IVA%','Descuento',''].map(c=>(
                     <span key={c} style={{ fontSize:'0.67rem', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.4px' }}>{c}</span>
                   ))}
                 </div>
                 {items.map((it,i) => (
-                  <div key={i} style={{ display:'grid', gridTemplateColumns:'1fr 80px 110px 80px 100px 36px', gap:'0.6rem', alignItems:'center' }}>
+                  <div key={i} style={{ display:'grid', gridTemplateColumns:'1fr 80px 110px 80px 100px 36px', gap:'0.6rem', alignItems:'center', minWidth: '500px' }}>
                     <input value={it.descripcion} onChange={e=>cambiarItem(i,'descripcion',e.target.value)}
                       placeholder="Ej: Mano de obra, producto agrícola..."
                       style={{ padding:'0.58rem 0.8rem', border:'1.5px solid #e2e8f0', borderRadius:'8px', fontSize:'0.84rem', fontFamily:'inherit', outline:'none', width:'100%', boxSizing:'border-box' }}
@@ -477,7 +479,7 @@ const FormNueva = ({ onGuardado, onVolver }) => {
             </div>
 
             {/* Fecha y observaciones */}
-            <div style={{ background:'white', borderRadius:'16px', border:'1px solid #f1f5f9', boxShadow:'0 2px 12px rgba(0,0,0,0.05)', padding:'1.2rem', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem' }}>
+            <div style={{ background:'white', borderRadius:'16px', border:'1px solid #f1f5f9', boxShadow:'0 2px 12px rgba(0,0,0,0.05)', padding:'1.2rem', display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:'1rem' }}>
               <div>
                 <label style={lblStyle}>Fecha de Emisión *</label>
                 <input type="date" value={fecha} onChange={e=>setFecha(e.target.value)} style={inputStyle}

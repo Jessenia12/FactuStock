@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clientesService, productosService, facturasService, negocioService } from '../services/api';
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 /* ════════════════════════════════════════════════════════
    TOUR DE BIENVENIDA — Nueva Factura
@@ -210,6 +211,7 @@ const Buscador = ({ placeholder, items, onSelect, renderItem, renderSelected, se
 
 /* ══ COMPONENTE PRINCIPAL ══ */
 const NuevaFactura = ({ onVolver, logoNegocio }) => {
+  const isMobile = useIsMobile();
 
   // ── Tour educativo primera visita ──────────────────────────────
   const [tourVisto_NF, setTourVisto_NF] = useState(() => !!localStorage.getItem(TOUR_KEY_NF));
@@ -317,7 +319,7 @@ const NuevaFactura = ({ onVolver, logoNegocio }) => {
   if (exito && facturaGuardada) return (
     <>
       <PrintViewSRI factura={facturaGuardada} negocio={negocioUsuario} logoNegocio={logoNegocio}/>
-      <div className="no-print" style={{padding:'1.4rem 2rem',fontFamily:"'Nunito','Segoe UI',sans-serif",background:'#f1f5f9',minHeight:'100vh'}}>
+      <div className="no-print" style={{padding:isMobile?'1rem 0.85rem':'1.4rem 2rem',fontFamily:"'Nunito','Segoe UI',sans-serif",background:'#f1f5f9',minHeight:'100vh'}}>
         <BarraContexto/>
         <div style={{maxWidth:'440px',margin:'1.5rem auto 0',animation:'popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)'}}>
           <div style={{background:'white',borderRadius:'20px',padding:'2.5rem',textAlign:'center',boxShadow:'0 4px 24px rgba(0,0,0,0.07)'}}>
@@ -372,7 +374,7 @@ const NuevaFactura = ({ onVolver, logoNegocio }) => {
   );
 
   return (
-    <div style={{padding:'1.4rem 2rem',fontFamily:"'Nunito','Segoe UI',sans-serif",background:'#f1f5f9',minHeight:'100vh'}}>
+    <div style={{padding:isMobile?'1rem 0.85rem':'1.4rem 2rem',fontFamily:"'Nunito','Segoe UI',sans-serif",background:'#f1f5f9',minHeight:'100vh'}}>
       {/* Tour educativo */}
       {!tourVisto_NF && <TourBienvenida_NF onCerrar={cerrarTour_NF} />}
       {mostrarEdu_NF && <BannerEdu_NF onClose={() => setMostrarEdu_NF(false)} />}
@@ -387,7 +389,7 @@ const NuevaFactura = ({ onVolver, logoNegocio }) => {
         </div>
       )}
 
-      <div style={{display:'grid',gridTemplateColumns:'1fr 330px',gap:'1.4rem',alignItems:'start'}}>
+      <div style={{display:'grid',gridTemplateColumns:isMobile?'1fr':'1fr 330px',gap:'1.4rem',alignItems:'start'}}>
         <div style={{display:'flex',flexDirection:'column',gap:'1.2rem'}}>
 
           {/* CLIENTE */}
@@ -401,7 +403,7 @@ const NuevaFactura = ({ onVolver, logoNegocio }) => {
                 <p style={{margin:0,fontSize:'0.7rem',color:'#94a3b8',fontWeight:'600'}}>Destinatario del comprobante</p>
               </div>
             </div>
-            <div style={{padding:'1.2rem 1.4rem',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem'}}>
+            <div style={{padding:'1.2rem 1.4rem',display:'grid',gridTemplateColumns:isMobile?'1fr':'1fr 1fr',gap:'1rem'}}>
               <div style={{gridColumn:'1/-1'}}>
                 <label style={lbl}>Cliente <span style={{color:'#ef4444'}}>*</span></label>
                 <Buscador placeholder="Buscar cliente por nombre o cédula..." items={clientes} loading={loadingDatos} selected={clienteSelec}

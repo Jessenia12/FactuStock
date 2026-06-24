@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clientesService, productosService } from '../services/api';
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 
 /* ════════════════════════════════════════════════════════
@@ -288,6 +289,7 @@ const BarraModoEdu_PROF = ({ onVerTutorial }) => (
 
 
 const Proforma = ({ onVolver }) => {
+  const isMobile = useIsMobile();
 
 
   // ── Tour educativo (por usuario) ─────────────────────
@@ -518,7 +520,7 @@ const Proforma = ({ onVolver }) => {
 
   // ── Pantalla de éxito (AZUL) ─────────────────────────────────────
   if (exito && proformaGuardada) return (
-    <div style={{ padding:'1.4rem 2rem', fontFamily:"'Nunito','Segoe UI',sans-serif", background:'#f1f5f9', minHeight:'100vh' }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 2rem', fontFamily:"'Nunito','Segoe UI',sans-serif", background:'#f1f5f9', minHeight:'100vh' }}>
       <BarraContexto />
       <div style={{ maxWidth:'500px', margin:'1.5rem auto 0', animation:'popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)' }}>
         <div style={{ background:'white', borderRadius:'20px', padding:'2.5rem', textAlign:'center', boxShadow:'0 4px 24px rgba(0,0,0,0.07)' }}>
@@ -607,7 +609,7 @@ const Proforma = ({ onVolver }) => {
 
   // ── Formulario principal ──────────────────────────────────
   return (
-    <div style={{ padding:'1.4rem 2rem', fontFamily:"'Nunito','Segoe UI',sans-serif", background:'#f1f5f9', minHeight:'100vh' }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 2rem', fontFamily:"'Nunito','Segoe UI',sans-serif", background:'#f1f5f9', minHeight:'100vh' }}>
       {/* Modal tour educativo */}
       {!tourVisto_PROF && <TourBienvenida_PROF onCerrar={cerrarTour_PROF} />}
       {/* Barra modo educativo */}
@@ -621,7 +623,7 @@ const Proforma = ({ onVolver }) => {
         </div>
       )}
 
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 330px', gap:'1.4rem', alignItems:'start' }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 330px', gap:'1.4rem', alignItems:'start' }}>
         <div style={{ display:'flex', flexDirection:'column', gap:'1.2rem' }}>
 
           {/* CLIENTE */}
@@ -635,7 +637,7 @@ const Proforma = ({ onVolver }) => {
                 <p style={{ margin:0, fontSize:'0.7rem', color:'#94a3b8', fontWeight:'600' }}>Destinatario de la cotización</p>
               </div>
             </div>
-            <div style={{ padding:'1.2rem 1.4rem', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem' }}>
+            <div style={{ padding:'1.2rem 1.4rem', display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:'1rem' }}>
               <div style={{ gridColumn:'1/-1' }}>
                 <label style={lbl}>Cliente <span style={{ color:'#ef4444' }}>*</span></label>
                 <Buscador

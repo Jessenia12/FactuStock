@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, useContext } from 'rea
 import ReactDOM from 'react-dom';
 import { createPortal } from 'react-dom';
 import { AppContext } from '../context/AppContext';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 /* ════════════════════════════════════════════════════════
    CONSTANTES GLOBALES
@@ -620,6 +621,7 @@ const BarraModoEdu_FE = ({ onVerTutorial }) => (
    COMPONENTE PRINCIPAL
 ════════════════════════════════════════════════════════ */
 const FacturasEmitidas = ({ onNuevoDocumento, filtroInicial = 'todos' }) => {
+  const isMobile = useIsMobile();
 
   const [tourVisto_FE, setTourVisto_FE] = useState(() => !!localStorage.getItem(TOUR_KEY_FE));
   const [mostrarEdu_FE, setMostrarEdu_FE] = useState(false);
@@ -855,7 +857,7 @@ const FacturasEmitidas = ({ onNuevoDocumento, filtroInicial = 'todos' }) => {
 
   /* ════ RENDER ════ */
   return (
-    <div style={{ padding: '1.4rem 1.5rem', fontFamily: "'Nunito','Segoe UI',system-ui,sans-serif", animation: 'fadeUp 0.3s ease both' }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 1.5rem', fontFamily: "'Nunito','Segoe UI',system-ui,sans-serif", animation: 'fadeUp 0.3s ease both' }}>
 
       {!tourVisto_FE && <TourBienvenida_FE onCerrar={cerrarTour_FE} />}
       {mostrarEdu_FE && <BannerEdu_FE onClose={() => setMostrarEdu_FE(false)} />}
@@ -876,7 +878,7 @@ const FacturasEmitidas = ({ onNuevoDocumento, filtroInicial = 'todos' }) => {
       )}
 
       {/* ── TABS ── */}
-      <div style={{ background: 'white', borderBottom: '2px solid #f1f5f9', margin: '-1.4rem -1.5rem 1.4rem', padding: '0 1.5rem', display: 'flex', alignItems: 'flex-end', overflowX: 'auto', scrollbarWidth: 'none' }}>
+      <div style={{ background: 'white', borderBottom: '2px solid #f1f5f9', margin: isMobile ? '-1rem -0.85rem 1rem' : '-1.4rem -1.5rem 1.4rem', padding: isMobile ? '0 0.85rem' : '0 1.5rem', display: 'flex', alignItems: 'flex-end', overflowX: 'auto', scrollbarWidth: 'none' }}>
         {TABS.map(tab => {
           const activo = tabActivo === tab.id;
           return (
@@ -905,7 +907,7 @@ const FacturasEmitidas = ({ onNuevoDocumento, filtroInicial = 'todos' }) => {
       </div>
 
       {/* ── STATS ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${getResumenCards().length},1fr)`, gap: '1rem', marginBottom: '1.3rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : `repeat(${getResumenCards().length},1fr)`, gap: isMobile ? '0.65rem' : '1rem', marginBottom: '1.3rem' }}>
         {getResumenCards().map((s, i) => (
           <div key={i} style={{ background: 'white', borderRadius: '16px', padding: '1rem 1.2rem', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', gap: '0.9rem', animation: `fadeUp 0.4s ease ${i * 0.06}s both` }}>
             <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{s.icon}</div>
@@ -974,7 +976,8 @@ const FacturasEmitidas = ({ onNuevoDocumento, filtroInicial = 'todos' }) => {
 
       {/* ── TABLA ── */}
       <div style={{ background: 'white', borderRadius: '16px', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', overflow: 'hidden', animation: 'fadeUp 0.4s ease 0.2s both' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr 110px 130px 110px 120px', padding: '0.7rem 1.4rem', borderBottom: '2px solid #f1f5f9', background: '#fafafa' }}>
+        <div style={{ overflowX: 'auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr 110px 130px 110px 120px', padding: '0.7rem 1.4rem', borderBottom: '2px solid #f1f5f9', background: '#fafafa', minWidth: '730px' }}>
           {['Comprobante','Cliente / Proveedor','Fecha','Estado','Total','Acciones'].map(col => (
             <span key={col} style={{ fontSize: '0.68rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{col}</span>
           ))}
@@ -983,7 +986,7 @@ const FacturasEmitidas = ({ onNuevoDocumento, filtroInicial = 'todos' }) => {
         {error && <div style={{ padding: '1.5rem', textAlign: 'center', color: '#b91c1c', fontSize: '0.86rem', background: '#fef2f2' }}>⚠️ {error}</div>}
 
         {loading && Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} style={{ display: 'grid', gridTemplateColumns: '150px 1fr 110px 130px 110px 120px', padding: '1rem 1.4rem', alignItems: 'center', borderBottom: '1px solid #f8fafc', gap: '0.5rem' }}>
+          <div key={i} style={{ display: 'grid', gridTemplateColumns: '150px 1fr 110px 130px 110px 120px', padding: '1rem 1.4rem', alignItems: 'center', borderBottom: '1px solid #f8fafc', gap: '0.5rem', minWidth: '730px' }}>
             <Skeleton h="13px" w="110px" />
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Skeleton h="30px" w="30px" radius="8px" /><Skeleton h="13px" /></div>
             <Skeleton h="13px" w="80px" />
@@ -1024,7 +1027,7 @@ const FacturasEmitidas = ({ onNuevoDocumento, filtroInicial = 'todos' }) => {
             <div key={getId(item)}
               onMouseEnter={() => setHoveredRow(getId(item))}
               onMouseLeave={() => setHoveredRow(null)}
-              style={{ display: 'grid', gridTemplateColumns: '150px 1fr 110px 130px 110px 120px', padding: '0.85rem 1.4rem', alignItems: 'center', borderBottom: i < items.length - 1 ? '1px solid #f8fafc' : 'none', background: hoveredRow === getId(item) ? '#f8faff' : 'transparent', transition: 'background 0.15s', animation: `fadeUp 0.3s ease ${i * 0.04}s both` }}>
+              style={{ display: 'grid', gridTemplateColumns: '150px 1fr 110px 130px 110px 120px', padding: '0.85rem 1.4rem', alignItems: 'center', borderBottom: i < items.length - 1 ? '1px solid #f8fafc' : 'none', background: hoveredRow === getId(item) ? '#f8faff' : 'transparent', transition: 'background 0.15s', animation: `fadeUp 0.3s ease ${i * 0.04}s both`, minWidth: '730px' }}>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: estado.color, flexShrink: 0 }} />
@@ -1076,6 +1079,7 @@ const FacturasEmitidas = ({ onNuevoDocumento, filtroInicial = 'todos' }) => {
           );
         })}
 
+        </div>{/* cierre overflowX wrapper */}
         {!loading && totalPaginas > 1 && (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.85rem 1.4rem', borderTop: '1px solid #f1f5f9', background: '#fafafa' }}>
             <span style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600' }}>

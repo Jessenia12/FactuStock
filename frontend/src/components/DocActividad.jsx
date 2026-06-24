@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 /* ══════════════════════════════════════════════════════════
    DocActividad.jsx
@@ -81,6 +82,7 @@ const TourDocente = ({ titulo, subtitulo, pasos, onCerrar }) => {
 };
 
 const DocActividad = () => {
+  const isMobile = useIsMobile();
   const [estudiantes, setEstudiantes] = useState([]);
   const getTourKey = () => {
     try {
@@ -117,7 +119,7 @@ const DocActividad = () => {
   const maxFacturas    = porFacturas[0]?.stats.total_facturas || 1;
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+    <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '1rem 0.85rem' : '1.8rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
 
       {/* Tour */}
       {!tourVisto && (
@@ -147,7 +149,7 @@ const DocActividad = () => {
 
       {/* Stats globales */}
       {resumen && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
           <StatCard label="Estudiantes" value={resumen.total_estudiantes} sub={`${resumen.estudiantes_activos} activos`} color={AZUL.p} bg={AZUL.ll} icono="👥" />
           <StatCard label="Total facturas" value={resumen.total_facturas} sub="Entre todos" color={VERDE.p} bg={VERDE.ll} icono="🧾" />
           <StatCard label="Total facturado" value={`$${(resumen.total_facturado || 0).toLocaleString('es-EC', { minimumFractionDigits: 2 })}`} sub="Solo finalizadas" color={AMBER.p} bg={AMBER.ll} icono="💰" />
@@ -169,7 +171,7 @@ const DocActividad = () => {
         <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>Cargando actividad...</div>
       ) : vista === 'ranking' ? (
         /* ── Vista ranking ── */
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.2rem' }}>
           {/* Por facturas */}
           <div style={{ background: 'white', borderRadius: '16px', border: '1px solid #f1f5f9', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
             <div style={{ padding: '0.85rem 1.2rem', borderBottom: '1px solid #f8fafc', background: '#fafafa', display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
@@ -223,7 +225,7 @@ const DocActividad = () => {
         </div>
       ) : (
         /* ── Vista alertas ── */
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.2rem' }}>
           {/* Sin actividad */}
           <div style={{ background: 'white', borderRadius: '16px', border: '1px solid #f1f5f9', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
             <div style={{ padding: '0.85rem 1.2rem', borderBottom: '1px solid #f8fafc', background: '#fafafa', display: 'flex', alignItems: 'center', gap: '0.55rem' }}>

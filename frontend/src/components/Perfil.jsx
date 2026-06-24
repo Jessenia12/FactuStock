@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 
 /* ════════════════════════════════════════════════════════
@@ -391,6 +392,7 @@ const BarraModoEdu_PERF = ({ onVerTutorial }) => (
 );
 
 const Perfil = ({ onVolver, onFotoActualizada }) => {
+  const isMobile = useIsMobile();
 
   // ── Tour educativo primera visita ─────────────────────
 
@@ -512,7 +514,7 @@ const Perfil = ({ onVolver, onFotoActualizada }) => {
   });
 
   return (
-    <div style={{ padding: '1.4rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif", background: '#f1f5f9', minHeight: '100%' }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif", background: '#f1f5f9', minHeight: '100%' }}>
       {/* ── Tour educativo ── */}
       {!tourVisto_PERF && <TourBienvenida_PERF onCerrar={cerrarTour_PERF} />}
       {mostrarEdu_PERF && <BannerEdu_PERF onClose={() => setMostrarEdu_PERF(false)} onVerTutorial={verTutorial_PERF} />}
@@ -546,7 +548,7 @@ const Perfil = ({ onVolver, onFotoActualizada }) => {
           <Spinner /> Cargando perfil...
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '1.4rem', alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '280px 1fr', gap: '1.4rem', alignItems: 'start' }}>
 
           {/* Columna izquierda */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -623,7 +625,7 @@ const Perfil = ({ onVolver, onFotoActualizada }) => {
                   <div style={{ width: '4px', height: '20px', borderRadius: '2px', background: C.mid }} />
                   <div><h3 style={{ margin: 0, fontSize: '0.9rem', fontWeight: '800', color: '#0f172a' }}>Información Personal</h3><p style={{ margin: 0, fontSize: '0.7rem', color: '#94a3b8', fontWeight: '600' }}>Actualiza tus datos de perfil</p></div>
                 </div>
-                <div style={{ padding: '1.4rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.1rem' }}>
+                <div style={{ padding: '1.4rem', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.1rem' }}>
                   <Input label="Nombres *" value={nombres} onChange={e => setNombres(e.target.value)} placeholder="Tu nombre" />
                   <Input label="Apellidos *" value={apellidos} onChange={e => setApellidos(e.target.value)} placeholder="Tu apellido" />
                   <div style={{ gridColumn: '1/-1' }}><Input label="Correo electrónico *" value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="correo@ejemplo.com" /></div>

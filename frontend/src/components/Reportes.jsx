@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { reportesService } from '../services/api';
 import * as XLSX from 'xlsx';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const API      = 'https://factustock-efdi.onrender.com/api';
 const getToken = () => localStorage.getItem('token');
@@ -307,6 +308,7 @@ const BannerEdu_REP = ({ onClose, onVerTutorial }) => (
 );
 
 const Reportes = () => {
+  const isMobile = useIsMobile();
 
   // ── Tour educativo primera visita ──────────────────────────────
   const [tourVisto_REP, setTourVisto_REP] = useState(
@@ -504,7 +506,7 @@ const Reportes = () => {
   const ACCENT2 = '#2563eb';
 
   return (
-    <div style={{ padding: '1.4rem 1.5rem', fontFamily: "'Nunito','Segoe UI',system-ui,sans-serif", animation: 'fadeUp 0.3s ease both' }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 1.5rem', fontFamily: "'Nunito','Segoe UI',system-ui,sans-serif", animation: 'fadeUp 0.3s ease both' }}>
       {!tourVisto_REP && <TourBienvenida_REP onCerrar={cerrarTour_REP} />}
       {mostrarEdu_REP && <BannerEdu_REP onClose={() => setMostrarEdu_REP(false)} onVerTutorial={verTutorial_REP} />}
       <BarraModoEdu_REP onVerTutorial={verTutorial_REP} />
@@ -583,7 +585,7 @@ const Reportes = () => {
       ══════════════════════════════════════════════════ */}
       {tab === 'ventas' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', animation: 'fadeUp 0.3s ease' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: '1rem' }}>
             {loading ? Array.from({length:4}).map((_,i) => (
               <div key={i} style={{ background:'white', borderRadius:'16px', padding:'1rem 1.2rem', boxShadow:'0 2px 12px rgba(0,0,0,0.05)' }}><Skeleton h="14px" w="60%" /><div style={{marginTop:'0.5rem'}}><Skeleton h="28px" w="80%" /></div></div>
             )) : [
@@ -602,7 +604,7 @@ const Reportes = () => {
             ))}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 320px', gap: '1rem' }}>
             <div style={{ background: 'white', borderRadius: '16px', padding: '1.2rem 1.4rem', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
               <p style={{ margin: '0 0 1rem', fontWeight: '800', fontSize: '0.9rem', color: '#0f172a' }}>Ventas por Mes</p>
               {loading ? <Skeleton h="120px" /> : porMes.length === 0
@@ -652,7 +654,7 @@ const Reportes = () => {
       ══════════════════════════════════════════════════ */}
       {tab === 'iva' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', animation: 'fadeUp 0.3s ease' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: '1rem' }}>
             {loading ? Array.from({length:3}).map((_,i)=>(
               <div key={i} style={{background:'white',borderRadius:'16px',padding:'1rem 1.2rem',boxShadow:'0 2px 12px rgba(0,0,0,0.05)'}}><Skeleton h="14px" w="60%"/><div style={{marginTop:'0.5rem'}}><Skeleton h="28px" w="80%"/></div></div>
             )) : [
@@ -684,7 +686,8 @@ const Reportes = () => {
                 </div>
                 <BotonesExportar onXLSX={handleExportIvaXLSX} onPDF={handleExportIvaPDF} loadingPDF={loadingPDF === 'iva'} />
               </div>
-              <div style={{ border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden' }}>
+              <div style={{ overflowX: 'auto' }}>
+              <div style={{ border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden', minWidth: '420px' }}>
                 {[
                   { casilla: '401', desc: 'Ventas locales (excluye activos fijos) tarifa 0%',  valor: ivaResumen?.totalSub0,   color: '#64748b' },
                   { casilla: '411', desc: 'Ventas locales (excluye activos fijos) tarifa 15%', valor: ivaResumen?.totalSubIva, color: ACCENT },
@@ -698,6 +701,7 @@ const Reportes = () => {
                   </div>
                 ))}
               </div>
+              </div>{/* cierre overflowX */}
               <p style={{ margin: '0.7rem 0 0', fontSize: '0.72rem', color: '#94a3b8' }}>⚠️ Valores referenciales basados en facturas finalizadas. Consulta a tu contador para la declaración oficial.</p>
             </div>
           )}
@@ -741,7 +745,8 @@ const Reportes = () => {
                     );
                   })}
                 </div>
-                <div style={{ border:'1px solid #f1f5f9', borderRadius:'12px', overflow:'hidden' }}>
+                <div style={{ overflowX: 'auto' }}>
+                <div style={{ border:'1px solid #f1f5f9', borderRadius:'12px', overflow:'hidden', minWidth: '480px' }}>
                   <div style={{ display:'grid', gridTemplateColumns:'2rem 1fr 140px 80px 120px', padding:'0.5rem 1rem', background:'#f8fafc', borderBottom:'1px solid #f1f5f9' }}>
                     {['#','Cliente','Identificación','Fact.','Total'].map(h=><span key={h} style={{fontSize:'0.66rem',fontWeight:'800',color:'#94a3b8',textTransform:'uppercase'}}>{h}</span>)}
                   </div>
@@ -755,6 +760,7 @@ const Reportes = () => {
                     </div>
                   ))}
                 </div>
+                </div>{/* cierre overflowX */}
               </>
             )}
           </div>
@@ -801,7 +807,8 @@ const Reportes = () => {
                     );
                   })}
                 </div>
-                <div style={{ border:'1px solid #f1f5f9', borderRadius:'12px', overflow:'hidden' }}>
+                <div style={{ overflowX: 'auto' }}>
+                <div style={{ border:'1px solid #f1f5f9', borderRadius:'12px', overflow:'hidden', minWidth: '460px' }}>
                   <div style={{ display:'grid', gridTemplateColumns:'2rem 1fr 80px 100px 120px', padding:'0.5rem 1rem', background:'#f8fafc', borderBottom:'1px solid #f1f5f9' }}>
                     {['#','Producto/Servicio','Cant.','En facturas','Total'].map(h=><span key={h} style={{fontSize:'0.66rem',fontWeight:'800',color:'#94a3b8',textTransform:'uppercase'}}>{h}</span>)}
                   </div>
@@ -815,6 +822,7 @@ const Reportes = () => {
                     </div>
                   ))}
                 </div>
+                </div>{/* cierre overflowX */}
               </>
             )}
           </div>
@@ -840,7 +848,8 @@ const Reportes = () => {
             ) : facturasList.length === 0 ? (
               <div style={{ textAlign:'center', padding:'2rem', color:'#94a3b8', fontSize:'0.85rem' }}>Sin facturas finalizadas en el período seleccionado</div>
             ) : (
-              <div style={{ border:'1px solid #f1f5f9', borderRadius:'12px', overflow:'hidden' }}>
+              <div style={{ overflowX: 'auto' }}>
+              <div style={{ border:'1px solid #f1f5f9', borderRadius:'12px', overflow:'hidden', minWidth: '820px' }}>
                 <div style={{ display:'grid', gridTemplateColumns:'140px 90px 1fr 120px 100px 100px 100px 110px', padding:'0.55rem 1rem', background:'#f8fafc', borderBottom:'1px solid #f1f5f9' }}>
                   {['Comprobante','Fecha','Cliente','RUC/Cédula','Base 0%','Base IVA','IVA','Total'].map(h=>(
                     <span key={h} style={{fontSize:'0.62rem',fontWeight:'800',color:'#94a3b8',textTransform:'uppercase',letterSpacing:'0.4px'}}>{h}</span>
@@ -866,6 +875,7 @@ const Reportes = () => {
                   <span style={{ fontSize:'0.9rem', fontWeight:'900', color:ACCENT, textAlign:'right' }}>{fmtMoney(facturasList.reduce((s,f)=>s+parseFloat(f.total||0),0))}</span>
                 </div>
               </div>
+              </div>{/* cierre overflowX */}
             )}
           </div>
         </div>

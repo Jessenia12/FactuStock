@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 /* ══════════════════════════════════════════════════════════
    GestionTarifasIVA.jsx
@@ -152,6 +153,7 @@ const ModalCrear = ({ onClose, onCreada }) => {
    COMPONENTE PRINCIPAL
 ══════════════════════════════════════════════════════════ */
 const GestionTarifasIVA = () => {
+  const isMobile = useIsMobile();
   const [tarifas, setTarifas]       = useState([]);
   const [cargando, setCargando]     = useState(false);
   const [modalCrear, setModalCrear] = useState(false);

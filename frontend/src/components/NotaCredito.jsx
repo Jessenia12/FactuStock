@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { facturasService } from '../services/api';
 import api from '../services/api';
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 /* ════════════════════════════════════════════════════════
    TOUR DE BIENVENIDA — Nota de Crédito
@@ -211,6 +212,7 @@ const BarraModoEdu_NC = ({ onVerTutorial }) => (
    COMPONENTE PRINCIPAL
 ══════════════════════════════════════════════════════════ */
 const NotaCredito = ({ onVolver }) => {
+  const isMobile = useIsMobile();
 
   // ── Obtener userId una sola vez ───────────────────────────
   const tourKey = React.useMemo(() => {
@@ -381,7 +383,7 @@ const NotaCredito = ({ onVolver }) => {
   // ── Pantalla de éxito ─────────────────────────────────────
   if (paso === 3 && resultado) {
     return (
-      <div style={{ padding: '1.4rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+      <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
         {!tourVisto && <TourBienvenida_NC onCerrar={cerrarTour} />}
         {mostrarBanner && <BannerEdu_NC onClose={() => setMostrarBanner(false)} onVerTutorial={verTutorial} />}
         <BarraContexto />
@@ -413,7 +415,7 @@ const NotaCredito = ({ onVolver }) => {
 
   // ── Formulario principal ──────────────────────────────────
   return (
-    <div style={{ padding: '1.4rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
       {/* Tour modal (primera visita) */}
       {!tourVisto && <TourBienvenida_NC onCerrar={cerrarTour} />}
 
@@ -458,7 +460,8 @@ const NotaCredito = ({ onVolver }) => {
               </button>
             </div>
 
-            <div style={{ border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden' }}>
+            <div style={{ overflowX: 'auto' }}>
+            <div style={{ border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden', minWidth: '530px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr 110px 110px 90px', padding: '0.5rem 1rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
                 {['N° Factura', 'Cliente', 'Fecha', 'Total', 'Acción'].map(c => (
                   <span key={c} style={{ fontSize: '0.68rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{c}</span>
@@ -491,13 +494,14 @@ const NotaCredito = ({ onVolver }) => {
                 })
               )}
             </div>
+            </div>{/* cierre overflowX */}
           </div>
         </div>
       )}
 
       {/* ── PASO 2: Detalles ── */}
       {paso === 2 && facturaSelec && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '1.2rem', alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 320px', gap: '1.2rem', alignItems: 'start' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
             {/* Tarjeta factura seleccionada */}
             <div style={{ background: AZUL.lighter, border: `1.5px solid ${AZUL.border}`, borderRadius: '14px', padding: '1rem 1.2rem', display: 'flex', gap: '2rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -535,8 +539,8 @@ const NotaCredito = ({ onVolver }) => {
                   Seleccionar todo
                 </button>
               </div>
-              <div style={{ padding: '1rem 1.2rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '36px 1fr 90px 120px 100px', gap: '0.5rem', padding: '0 0 0.5rem', borderBottom: '1px solid #f8fafc', marginBottom: '0.5rem' }}>
+              <div style={{ padding: '1rem 1.2rem', overflowX: 'auto' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '36px 1fr 90px 120px 100px', gap: '0.5rem', padding: '0 0 0.5rem', borderBottom: '1px solid #f8fafc', marginBottom: '0.5rem', minWidth: '460px' }}>
                   {['', 'Producto', 'P. Unit.', 'Cantidad', 'Subtotal'].map(c => (
                     <span key={c} style={{ fontSize: '0.67rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{c}</span>
                   ))}
@@ -544,7 +548,7 @@ const NotaCredito = ({ onVolver }) => {
                 {detalles.map((d, i) => {
                   const sub = d.cantidad * d.precio_unitario;
                   return (
-                    <div key={i} style={{ display: 'grid', gridTemplateColumns: '36px 1fr 90px 120px 100px', gap: '0.5rem', alignItems: 'center', padding: '0.55rem 0', borderBottom: i < detalles.length - 1 ? '1px solid #f8fafc' : 'none', opacity: d.incluir ? 1 : 0.5 }}>
+                    <div key={i} style={{ display: 'grid', gridTemplateColumns: '36px 1fr 90px 120px 100px', gap: '0.5rem', alignItems: 'center', padding: '0.55rem 0', borderBottom: i < detalles.length - 1 ? '1px solid #f8fafc' : 'none', opacity: d.incluir ? 1 : 0.5, minWidth: '460px' }}>
                       <input type="checkbox" checked={d.incluir} onChange={() => toggleDetalle(i)}
                         style={{ width: '16px', height: '16px', accentColor: AZUL.mid, cursor: 'pointer' }} />
                       <div>
@@ -569,7 +573,7 @@ const NotaCredito = ({ onVolver }) => {
             </div>
 
             {/* Motivo, fecha, observaciones */}
-            <div style={{ background: 'white', borderRadius: '16px', border: '1px solid #f1f5f9', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', padding: '1.2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div style={{ background: 'white', borderRadius: '16px', border: '1px solid #f1f5f9', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', padding: '1.2rem', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1rem' }}>
               <div>
                 <label style={lblStyle}>Motivo *</label>
                 <select value={motivo} onChange={e => setMotivo(e.target.value)} style={inputStyle}>

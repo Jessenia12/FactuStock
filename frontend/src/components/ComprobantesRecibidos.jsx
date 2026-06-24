@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 import { createPortal } from 'react-dom';
 
 const API      = 'https://factustock-efdi.onrender.com/api';
@@ -518,6 +519,7 @@ const BarraModoEdu_RECV = ({ onVerTutorial }) => (
 );
 
 const ComprobantesRecibidos = () => {
+  const isMobile = useIsMobile();
 
   // ── Tour educativo primera visita ──────────────────────────────
   const [tourVisto_RECV, setTourVisto_RECV] = useState(
@@ -675,7 +677,7 @@ const ComprobantesRecibidos = () => {
   };
 
   return (
-    <div style={{ padding:'1.4rem 1.5rem', fontFamily:"'Nunito','Segoe UI',system-ui,sans-serif", animation:'fadeUp 0.3s ease both' }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 1.5rem', fontFamily:"'Nunito','Segoe UI',system-ui,sans-serif", animation:'fadeUp 0.3s ease both' }}>
       {!tourVisto_RECV && <TourBienvenida_RECV onCerrar={cerrarTour_RECV} />}
       {mostrarEdu_RECV && <BannerEdu_RECV onClose={() => setMostrarEdu_RECV(false)} onVerTutorial={verTutorial_RECV} />}
       <BarraModoEdu_RECV onVerTutorial={verTutorial_RECV} />
@@ -762,7 +764,7 @@ const ComprobantesRecibidos = () => {
       </div>
 
       {/* STATS */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'1rem', marginBottom:'1.3rem' }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4,1fr)', gap: isMobile ? '0.65rem' : '1rem', marginBottom:'1.3rem' }}>
         {[
           { label:'Total Recibido', value:fmtMoney(resumen.totalRegistrados), color:BLUE,      bg:BLUE_LIGHTER,
             icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg> },
@@ -854,7 +856,8 @@ const ComprobantesRecibidos = () => {
 
       {/* TABLA */}
       <div style={{ background:'white', borderRadius:'16px', boxShadow:'0 2px 12px rgba(0,0,0,0.05)', overflow:'hidden', animation:'fadeUp 0.4s ease 0.2s both' }}>
-        <div style={{ display:'grid', gridTemplateColumns:'160px 1fr 130px 110px 130px 110px 64px', padding:'0.7rem 1.4rem', borderBottom:'2px solid #f1f5f9', background:'#fafafa' }}>
+        <div style={{ overflowX: 'auto' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'160px 1fr 130px 110px 130px 110px 64px', padding:'0.7rem 1.4rem', borderBottom:'2px solid #f1f5f9', background:'#fafafa', minWidth: '810px' }}>
           {['Comprobante','Emisor','Tipo','Fecha','Estado','Total',''].map(col => (
             <span key={col} style={{ fontSize:'0.68rem', fontWeight:'800', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.5px' }}>{col}</span>
           ))}
@@ -863,7 +866,7 @@ const ComprobantesRecibidos = () => {
         {error && <div style={{ padding:'1.5rem', textAlign:'center', color:'#b91c1c', fontSize:'0.86rem', background:'#fef2f2' }}>⚠️ {error}</div>}
 
         {loading && Array.from({ length:5 }).map((_, i) => (
-          <div key={i} style={{ display:'grid', gridTemplateColumns:'160px 1fr 130px 110px 130px 110px 64px', padding:'1rem 1.4rem', alignItems:'center', borderBottom:'1px solid #f8fafc', gap:'0.5rem' }}>
+          <div key={i} style={{ display:'grid', gridTemplateColumns:'160px 1fr 130px 110px 130px 110px 64px', padding:'1rem 1.4rem', alignItems:'center', borderBottom:'1px solid #f8fafc', gap:'0.5rem', minWidth: '810px' }}>
             <Skeleton h="13px" w="120px"/>
             <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}><Skeleton h="30px" w="30px" radius="8px"/><Skeleton h="13px"/></div>
             <Skeleton h="20px" w="100px" radius="99px"/>
@@ -920,7 +923,7 @@ const ComprobantesRecibidos = () => {
                 padding:'0.85rem 1.4rem', alignItems:'center',
                 borderBottom: i < comprobantes.length-1 ? '1px solid #f8fafc' : 'none',
                 background: hoveredRow===c.id_comprobante ? '#f8faff' : 'transparent',
-                transition:'background 0.15s', animation:`fadeUp 0.3s ease ${i*0.04}s both` }}>
+                transition:'background 0.15s', animation:`fadeUp 0.3s ease ${i*0.04}s both`, minWidth: '810px' }}>
 
               <div style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
                 <div style={{ width:'6px', height:'6px', borderRadius:'50%', background:est.dot, flexShrink:0 }} />
@@ -978,6 +981,7 @@ const ComprobantesRecibidos = () => {
           );
         })}
 
+        </div>{/* cierre overflowX wrapper */}
         {!loading && totalPaginas > 1 && (
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between',
             padding:'0.85rem 1.4rem', borderTop:'1px solid #f1f5f9', background:'#fafafa' }}>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { productosService } from '../services/api';
 import * as XLSX from 'xlsx';
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const _getTourKey_PROD = (uid) => `prod_tour_visto_${uid || 'default'}`;
 
@@ -812,8 +813,10 @@ const GestionProductos = () => {
     return                                { bg:'#d1fae5', color:'#065f46', label:'En stock'   };
   };
 
+  const isMobile = useIsMobile();
+
   return (
-    <div style={{ padding:'1.4rem 1.5rem', fontFamily:"'Nunito','Segoe UI',system-ui,sans-serif" }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 1.5rem', fontFamily:"'Nunito','Segoe UI',system-ui,sans-serif" }}>
       {!tourVisto_PROD && <TourBienvenida_PROD onCerrar={cerrarTour_PROD} />}
       {mostrarEdu_PROD && <BannerEdu_PROD onClose={() => setMostrarEdu_PROD(false)} />}
       <BarraModoEdu_PROD onVerTutorial={verTutorial_PROD} />
@@ -853,11 +856,12 @@ const GestionProductos = () => {
       {errorApi && <div style={{ padding:'0.75rem 1rem', background:'#fef2f2', border:'1px solid #fecaca', borderRadius:'10px', color:'#b91c1c', fontSize:'0.83rem', marginBottom:'1rem' }}>⚠️ {errorApi}</div>}
 
       <div style={{ background:'white', borderRadius:'16px', boxShadow:'0 2px 12px rgba(0,0,0,0.05)', overflow:'hidden', animation:'fadeUp 0.4s ease 0.1s both' }}>
-        <div style={{ display:'grid', gridTemplateColumns:'90px 1fr 90px 100px 80px 80px 100px', padding:'0.65rem 1.2rem', borderBottom:'2px solid #f1f5f9', gap:'0.75rem', background:'#fafafa' }}>
+        <div style={{ overflowX: 'auto' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'90px 1fr 90px 100px 80px 80px 100px', padding:'0.65rem 1.2rem', borderBottom:'2px solid #f1f5f9', gap:'0.75rem', background:'#fafafa', minWidth: '640px' }}>
           {['Código','Producto','Precio','IVA','Stock','Estado','Acciones'].map(h => <span key={h} style={{ fontSize:'0.69rem', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.5px' }}>{h}</span>)}
         </div>
         {loading ? Array.from({ length: POR_PAGINA }).map((_,i) => (
-          <div key={i} style={{ display:'grid', gridTemplateColumns:'90px 1fr 90px 100px 80px 80px 100px', padding:'0.85rem 1.2rem', gap:'0.75rem', borderBottom:'1px solid #f8fafc', alignItems:'center' }}>
+          <div key={i} style={{ display:'grid', gridTemplateColumns:'90px 1fr 90px 100px 80px 80px 100px', padding:'0.85rem 1.2rem', gap:'0.75rem', borderBottom:'1px solid #f8fafc', alignItems:'center', minWidth: '640px' }}>
             {[70,160,60,60,40,72,60].map((w,j) => <div key={j} style={{ height:'14px', width:`${w}px`, borderRadius:'6px', background:'linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%)', backgroundSize:'200% 100%', animation:'shimmer 1.4s infinite' }} />)}
           </div>
         )) : productos.length === 0 ? (
@@ -869,7 +873,7 @@ const GestionProductos = () => {
         ) : productos.map((p, i) => {
           const s = stockColor(p);
           return (
-            <div key={p.id_producto} style={{ display:'grid', gridTemplateColumns:'90px 1fr 90px 100px 80px 80px 100px', padding:'0.78rem 1.2rem', gap:'0.75rem', borderBottom:i<productos.length-1?'1px solid #f8fafc':'none', alignItems:'center', transition:'background 0.12s', animation:`fadeUp 0.3s ease ${i*0.04}s both` }} onMouseEnter={e=>e.currentTarget.style.background='#f8faff'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+            <div key={p.id_producto} style={{ display:'grid', gridTemplateColumns:'90px 1fr 90px 100px 80px 80px 100px', padding:'0.78rem 1.2rem', gap:'0.75rem', borderBottom:i<productos.length-1?'1px solid #f8fafc':'none', alignItems:'center', transition:'background 0.12s', animation:`fadeUp 0.3s ease ${i*0.04}s both`, minWidth: '640px' }} onMouseEnter={e=>e.currentTarget.style.background='#f8faff'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
               <span style={{ fontSize:'0.78rem', fontWeight:'700', color:'#64748b', background:'#f1f5f9', borderRadius:'6px', padding:'3px 7px', display:'inline-block' }}>{p.codigo}</span>
               <div><div style={{ fontSize:'0.86rem', fontWeight:'700', color:'#0f172a' }}>{p.nombre}</div>{p.descripcion && <div style={{ fontSize:'0.72rem', color:'#94a3b8', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'200px' }}>{p.descripcion}</div>}</div>
               <span style={{ fontSize:'0.86rem', fontWeight:'700', color:'#0f172a' }}>{fmtMoney(p.precio_unitario)}</span>
@@ -883,6 +887,7 @@ const GestionProductos = () => {
             </div>
           );
         })}
+        </div>{/* cierre overflowX wrapper */}
         {!loading && totalPaginas > 1 && (
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.85rem 1.4rem', borderTop:'1px solid #f1f5f9', background:'#fafafa' }}>
             <span style={{ fontSize:'0.78rem', color:'#94a3b8', fontWeight:'600' }}>Mostrando {Math.min((pagina-1)*POR_PAGINA+1,total)}–{Math.min(pagina*POR_PAGINA,total)} de {total}</span>

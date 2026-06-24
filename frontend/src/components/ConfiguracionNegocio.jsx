@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import ReactDOM from 'react-dom';
 import { negocioService } from '../services/api';
 import { AppContext } from '../context/AppContext';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const API      = 'https://factustock-efdi.onrender.com/api';
 const API_BASE = 'https://factustock-efdi.onrender.com';
@@ -201,6 +202,7 @@ const EduCard = ({ emoji, titulo, texto, color = C.primary }) => (
 // COMPONENTE PRINCIPAL
 // ══════════════════════════════════════════════════════════
 const ConfiguracionNegocio = () => {
+  const isMobile = useIsMobile();
   // ✅ FIX: obtenemos el usuario del contexto para clave de tour por usuario
   const { setLogoNegocio, usuario } = useContext(AppContext);
 
@@ -387,7 +389,7 @@ const ConfiguracionNegocio = () => {
   return (
     <div
       style={{
-        padding   : '1.4rem 1.5rem',
+        padding   : isMobile ? '1rem 0.85rem' : '1.4rem 1.5rem',
         fontFamily: "'Nunito','Segoe UI',system-ui,sans-serif",
         animation : 'cfgFadeUp 0.3s ease both',
       }}
@@ -615,7 +617,7 @@ const ConfiguracionNegocio = () => {
                 </div>
               )}
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.2rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.2rem' }}>
                 <Campo label="RUC / Cédula" requerido ayuda="El número que aparecerá como RUC del emisor en la factura">
                   <Input value={form.ruc} onChange={(v) => cambiar('ruc', v)} placeholder="Ej: 1792345678001" maxLength={13} />
                 </Campo>
@@ -653,7 +655,7 @@ const ConfiguracionNegocio = () => {
                 </div>
               )}
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.2rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.2rem' }}>
                 <Campo label="Tipo de Contribuyente" span={2} ayuda="Régimen tributario al que perteneces según el SRI">
                   <select value={form.contribuyente} onChange={(e) => cambiar('contribuyente', e.target.value)} style={selectStyle}>
                     <option value="RIMPE - Emprendedores">RIMPE — Emprendedores</option>

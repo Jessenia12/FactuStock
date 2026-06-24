@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { clientesService } from '../services/api';
 import * as XLSX from 'xlsx'; // npm install xlsx
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 
 /* ════════════════════════════════════════════════════════
@@ -1226,8 +1227,10 @@ const GestionClientes = () => {
 
   const COLORS = ['#0ea5e9', '#8b5cf6', '#f97316', '#6366f1', '#10b981', '#f59e0b', '#ef4444', '#ec4899'];
 
+  const isMobile = useIsMobile();
+
   return (
-    <div style={{ padding: '1.4rem 1.5rem', fontFamily: "'Nunito','Segoe UI',system-ui,sans-serif" }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 1.5rem', fontFamily: "'Nunito','Segoe UI',system-ui,sans-serif" }}>
       {/* ── Tour educativo ── */}
       {!tourVisto_CLI && <TourBienvenida_CLI onCerrar={cerrarTour_CLI} />}
       {mostrarEdu_CLI && <BannerEdu_CLI onClose={() => setMostrarEdu_CLI(false)} onVerTutorial={verTutorial_CLI} />}
@@ -1302,14 +1305,15 @@ const GestionClientes = () => {
       )}
 
       <div style={{ background: 'white', borderRadius: '16px', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', overflow: 'hidden', animation: 'fadeUp 0.4s ease 0.1s both' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr 160px 180px 130px 80px', padding: '0.7rem 1.4rem', borderBottom: '2px solid #f1f5f9', background: '#fafafa' }}>
+        <div style={{ overflowX: 'auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr 160px 180px 130px 80px', padding: '0.7rem 1.4rem', borderBottom: '2px solid #f1f5f9', background: '#fafafa', minWidth: '680px' }}>
           {['', 'Cliente', 'Identificación', 'Email', 'Teléfono', 'Acciones'].map(h => (
             <span key={h} style={{ fontSize: '0.68rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{h}</span>
           ))}
         </div>
 
         {loading && Array.from({ length: POR_PAGINA }).map((_, i) => (
-          <div key={i} style={{ display: 'grid', gridTemplateColumns: '44px 1fr 160px 180px 130px 80px', padding: '0.85rem 1.4rem', alignItems: 'center', borderBottom: i < POR_PAGINA - 1 ? '1px solid #f8fafc' : 'none', gap: '0.5rem' }}>
+          <div key={i} style={{ display: 'grid', gridTemplateColumns: '44px 1fr 160px 180px 130px 80px', padding: '0.85rem 1.4rem', alignItems: 'center', borderBottom: i < POR_PAGINA - 1 ? '1px solid #f8fafc' : 'none', gap: '0.5rem', minWidth: '680px' }}>
             <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: '#e2e8f0' }} />
             {[140, 100, 150, 80, 60].map((w, j) => (
               <div key={j} style={{ height: '13px', width: `${w}px`, borderRadius: '6px', background: 'linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.4s infinite' }} />
@@ -1334,7 +1338,7 @@ const GestionClientes = () => {
 
         {!loading && clientes.map((c, i) => (
           <div key={c.id_persona_comercial}
-            style={{ display: 'grid', gridTemplateColumns: '44px 1fr 160px 180px 130px 80px', padding: '0.78rem 1.4rem', alignItems: 'center', borderBottom: i < clientes.length - 1 ? '1px solid #f8fafc' : 'none', transition: 'background 0.12s', animation: `fadeUp 0.3s ease ${i * 0.04}s both` }}
+            style={{ display: 'grid', gridTemplateColumns: '44px 1fr 160px 180px 130px 80px', padding: '0.78rem 1.4rem', alignItems: 'center', borderBottom: i < clientes.length - 1 ? '1px solid #f8fafc' : 'none', transition: 'background 0.12s', animation: `fadeUp 0.3s ease ${i * 0.04}s both`, minWidth: '680px' }}
             onMouseEnter={e => e.currentTarget.style.background = '#f8faff'}
             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
             <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: COLORS[i % COLORS.length], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.78rem', fontWeight: '800', color: 'white', flexShrink: 0 }}>
@@ -1367,6 +1371,7 @@ const GestionClientes = () => {
           </div>
         ))}
 
+        </div>{/* cierre overflowX wrapper */}
         {!loading && totalPaginas > 1 && (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.85rem 1.4rem', borderTop: '1px solid #f1f5f9', background: '#fafafa' }}>
             <span style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: '600' }}>

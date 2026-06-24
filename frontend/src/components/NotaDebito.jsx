@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { facturasService } from '../services/api';
 import api from '../services/api';
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 /* ════════════════════════════════════════════════════════
    TOUR DE BIENVENIDA — Nota de Débito
@@ -203,6 +204,7 @@ const BarraModoEdu_ND = ({ onVerTutorial }) => (
    COMPONENTE PRINCIPAL
 ══════════════════════════════════════════════════════════ */
 const NotaDebito = ({ onVolver }) => {
+  const isMobile = useIsMobile();
 
   // ── Obtener tourKey una sola vez ──────────────────────────
   const tourKey = React.useMemo(() => {
@@ -349,7 +351,7 @@ const NotaDebito = ({ onVolver }) => {
   // ── Pantalla de éxito ─────────────────────────────────────
   if (paso === 3 && resultado) {
     return (
-      <div style={{ padding: '1.4rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+      <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 2rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
         {!tourVisto && <TourBienvenida_ND onCerrar={cerrarTour} />}
         {mostrarBanner && <BannerEdu_ND onClose={() => setMostrarBanner(false)} onVerTutorial={verTutorial} />}
         <BarraContexto />
@@ -426,7 +428,8 @@ const NotaDebito = ({ onVolver }) => {
               </button>
             </div>
 
-            <div style={{ border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden' }}>
+            <div style={{ overflowX: 'auto' }}>
+            <div style={{ border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden', minWidth: '530px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr 110px 110px 90px', padding: '0.5rem 1rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
                 {['N° Factura', 'Cliente', 'Fecha', 'Total', 'Acción'].map(c => (
                   <span key={c} style={{ fontSize: '0.68rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{c}</span>
@@ -459,13 +462,14 @@ const NotaDebito = ({ onVolver }) => {
                 })
               )}
             </div>
+            </div>{/* cierre overflowX */}
           </div>
         </div>
       )}
 
       {/* ── PASO 2: Conceptos de cargo ── */}
       {paso === 2 && facturaSelec && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '1.2rem', alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 320px', gap: '1.2rem', alignItems: 'start' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
             {/* Tarjeta factura seleccionada */}
             <div style={{ background: AZUL.lighter, border: `1.5px solid ${AZUL.border}`, borderRadius: '14px', padding: '1rem 1.2rem', display: 'flex', gap: '2rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -503,14 +507,14 @@ const NotaDebito = ({ onVolver }) => {
                   + Agregar concepto
                 </button>
               </div>
-              <div style={{ padding: '1rem 1.2rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px 110px 36px', gap: '0.75rem', padding: '0 0.25rem' }}>
+              <div style={{ padding: '1rem 1.2rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflowX: 'auto' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px 110px 36px', gap: '0.75rem', padding: '0 0.25rem', minWidth: '380px' }}>
                   {['Descripción del concepto', 'Valor ($)', 'IVA', ''].map(c => (
                     <span key={c} style={{ fontSize: '0.67rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{c}</span>
                   ))}
                 </div>
                 {conceptos.map((c, i) => (
-                  <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 120px 110px 36px', gap: '0.75rem', alignItems: 'center' }}>
+                  <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 120px 110px 36px', gap: '0.75rem', alignItems: 'center', minWidth: '380px' }}>
                     <input value={c.descripcion} onChange={e => cambiarConcepto(i, 'descripcion', e.target.value)}
                       placeholder={`Ej: ${i === 0 ? 'Interés por mora 3 meses' : 'Concepto adicional'}`}
                       style={{ ...inputStyle, padding: '0.58rem 0.8rem' }}
@@ -543,7 +547,7 @@ const NotaDebito = ({ onVolver }) => {
             </div>
 
             {/* Motivo, fecha, observaciones */}
-            <div style={{ background: 'white', borderRadius: '16px', border: '1px solid #f1f5f9', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', padding: '1.2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div style={{ background: 'white', borderRadius: '16px', border: '1px solid #f1f5f9', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', padding: '1.2rem', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1rem' }}>
               <div>
                 <label style={lblStyle}>Motivo *</label>
                 <select value={motivo} onChange={e => setMotivo(e.target.value)} style={inputStyle}>

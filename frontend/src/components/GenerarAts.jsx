@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import api from '../services/api';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 /* ─── UTILIDADES ─────────────────────────────────────────────────────── */
 const fmtMoney = (v) =>
@@ -213,6 +214,7 @@ const TourBienvenida = ({ onCerrar }) => {
    COMPONENTE PRINCIPAL
 ═══════════════════════════════════════════════════════════════════════ */
 const GenerarAts = () => {
+  const isMobile = useIsMobile();
   const hoy = new Date();
   const [anio,       setAnio]       = useState(hoy.getFullYear());
   const [mes,        setMes]        = useState(hoy.getMonth() + 1);
@@ -290,7 +292,7 @@ const GenerarAts = () => {
   ];
 
   return (
-    <div style={{ padding: '1.4rem 1.5rem', fontFamily: "'Nunito','Segoe UI',system-ui,sans-serif", animation: 'fadeUp 0.3s ease both' }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 1.5rem', fontFamily: "'Nunito','Segoe UI',system-ui,sans-serif", animation: 'fadeUp 0.3s ease both' }}>
 
       {!tourVisto && <TourBienvenida onCerrar={cerrarTour} />}
 
@@ -457,7 +459,7 @@ const GenerarAts = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', animation: 'fadeUp 0.3s ease' }}>
 
           {mostrarEdu && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '0.75rem' }}>
               <EduCard emoji="📤" titulo="¿Qué son las Ventas?" color={ACCENT}
                 texto="Son las facturas que tú emitiste como vendedor. El IVA generado lo debes pagar al SRI." />
               <EduCard emoji="📥" titulo="¿Qué son las Compras?" color="#10b981"
@@ -483,7 +485,7 @@ const GenerarAts = () => {
           </div>
 
           {/* KPIs ventas/compras */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1rem' }}>
             {/* Ventas */}
             <div style={{ background: 'white', borderRadius: '16px', padding: '1.2rem 1.4rem', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', marginBottom: '0.5rem' }}>
@@ -621,7 +623,8 @@ const GenerarAts = () => {
             ) : ventas.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8', fontSize: '0.85rem' }}>Sin facturas finalizadas en este período</div>
             ) : (
-              <div style={{ border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden' }}>
+              <div style={{ overflowX: 'auto' }}>
+              <div style={{ border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden', minWidth: '760px' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '130px 85px 1fr 110px 90px 90px 90px 100px', padding: '0.5rem 1rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
                   {['Comprobante', 'Fecha', 'Cliente', 'Identificación', 'Base 0%', 'Base IVA', 'IVA', 'Total'].map(h => (
                     <span key={h} style={{ fontSize: '0.62rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.3px' }}>{h}</span>
@@ -647,6 +650,7 @@ const GenerarAts = () => {
                   <span style={{ fontSize: '0.86rem', fontWeight: '900', color: ACCENT, textAlign: 'right' }}>{fmtMoney(ventas.reduce((s, v) => s + v.total, 0))}</span>
                 </div>
               </div>
+              </div>{/* cierre overflowX ventas */}
             )}
           </div>
         </div>
@@ -680,7 +684,8 @@ const GenerarAts = () => {
                 </p>
               </div>
             ) : (
-              <div style={{ border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden' }}>
+              <div style={{ overflowX: 'auto' }}>
+              <div style={{ border: '1px solid #f1f5f9', borderRadius: '12px', overflow: 'hidden', minWidth: '820px' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '120px 80px 80px 1fr 110px 85px 85px 90px 100px', padding: '0.5rem 1rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9' }}>
                   {['Comprobante', 'Tipo', 'Fecha', 'Proveedor/Emisor', 'Identificación', 'Base 0%', 'Base IVA', 'IVA', 'Total'].map(h => (
                     <span key={h} style={{ fontSize: '0.62rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.3px' }}>{h}</span>
@@ -709,6 +714,7 @@ const GenerarAts = () => {
                   <span style={{ fontSize: '0.86rem', fontWeight: '900', color: '#10b981', textAlign: 'right' }}>{fmtMoney(compras.reduce((s, c) => s + c.total, 0))}</span>
                 </div>
               </div>
+              </div>{/* cierre overflowX compras */}
             )}
           </div>
         </div>
@@ -722,7 +728,7 @@ const GenerarAts = () => {
             <p style={{ margin: '0 0 0.9rem', fontWeight: '900', fontSize: '0.9rem', color: ACCENT, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               📚 Glosario — Términos del ATS
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.65rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '0.65rem' }}>
               {[
                 { t: 'ATS', d: 'Anexo Transaccional Simplificado. Declaración mensual de ventas y compras que se presenta al SRI.' },
                 { t: 'SRI', d: 'Servicio de Rentas Internas. Es el organismo del Estado ecuatoriano que recauda impuestos.' },

@@ -329,6 +329,13 @@ const Login = () => {
   const [loading, setLoading]                 = useState(false);
   const [error, setError]                     = useState('');
   const [mostrarRecuperacion, setMostrarRecuperacion] = useState(false);
+  const [isMobile, setIsMobile]               = useState(() => window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -351,13 +358,13 @@ const Login = () => {
     <>
       {mostrarRecuperacion && <ModalRecuperacion onClose={() => setMostrarRecuperacion(false)} />}
 
-      <div style={{ display:'flex', minHeight:'100vh', width:'100%', margin:0, padding:0, fontFamily:"'Segoe UI', system-ui, sans-serif", backgroundColor:'#edf5ff', overflow:'hidden' }}>
-        <AnimatedPanel />
+      <div style={{ display:'flex', minHeight:'100vh', width:'100%', margin:0, padding:0, fontFamily:"'Segoe UI', system-ui, sans-serif", backgroundColor: isMobile ? '#15389a' : '#edf5ff', overflow:'hidden' }}>
+        {!isMobile && <AnimatedPanel />}
 
-        <div style={{ flex:1, backgroundColor:'#edf5ff', display:'flex', alignItems:'center', justifyContent:'center', padding:'2rem 1.5rem' }}>
-          <div style={{ width:'100%', maxWidth:'480px', backgroundColor:'#ffffff', borderRadius:'24px', boxShadow:'0 12px 48px rgba(0,0,0,0.12)', padding:'3rem' }}>
+        <div style={{ flex:1, backgroundColor: isMobile ? '#15389a' : '#edf5ff', display:'flex', alignItems:'center', justifyContent:'center', padding: isMobile ? '1.5rem 1rem' : '2rem 1.5rem' }}>
+          <div style={{ width:'100%', maxWidth:'480px', backgroundColor:'#ffffff', borderRadius:'24px', boxShadow:'0 12px 48px rgba(0,0,0,0.18)', padding: isMobile ? '1.75rem 1.5rem' : '3rem' }}>
 
-            <h2 style={{ fontSize:'1.75rem', fontWeight:'800', color:'#0f172a', marginBottom:'1.75rem', marginTop:0, letterSpacing:'-0.3px' }}>INICIAR SESIÓN</h2>
+            <h2 style={{ fontSize: isMobile ? '1.4rem' : '1.75rem', fontWeight:'800', color:'#0f172a', marginBottom:'1.75rem', marginTop:0, letterSpacing:'-0.3px' }}>INICIAR SESIÓN</h2>
 
             {error && (
               <div style={{ marginBottom:'1rem', padding:'0.75rem 1rem', backgroundColor:'#fef2f2', borderLeft:'4px solid #ef4444', borderRadius:'8px' }}>

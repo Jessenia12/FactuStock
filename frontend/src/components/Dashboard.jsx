@@ -712,6 +712,8 @@ const Dashboard = () => {
   const [activeNav, setActiveNav] = useState('inicio');
   const [hoveredRow, setHoveredRow] = useState(null);
   const [modalDocumento, setModalDocumento] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   /* ── Tour educativo ── */
   const [tourVisto_DASH, setTourVisto_DASH] = useState(() => !!localStorage.getItem(TOUR_KEY_DASH));
@@ -824,9 +826,19 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const handler = (e) => { if (e.key === 'Escape') { setModalDocumento(false); setModalVer(null); setModalEditar(null); setItemAnular(null); } };
+    const handler = (e) => { if (e.key === 'Escape') { setModalDocumento(false); setModalVer(null); setModalEditar(null); setItemAnular(null); setMenuAbierto(false); } };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) setMenuAbierto(false);
+    };
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
   }, []);
 
   const cargarDashboard = useCallback(async () => {
@@ -844,7 +856,7 @@ const Dashboard = () => {
   }, [activeNav, location.key, cargarDashboard]);
 
   const handleLogout = async () => { await authService.logout(); navigate('/login'); };
-  const navegar = (seccion) => { setActiveNav(seccion); };
+  const navegar = (seccion) => { setActiveNav(seccion); if (isMobile) setMenuAbierto(false); };
 
   /* ── Al actualizar foto desde Perfil ────────────────────────────────
      Actualiza el AppContext (sidebar/topbar reactualizan al instante)
@@ -921,8 +933,13 @@ const Dashboard = () => {
       {modalVer && <ModalVerFactura factura={modalVer} onCerrar={() => setModalVer(null)} onAnular={(f) => { setModalVer(null); solicitarAnulacion(f); }} />}
       {modalEditar && <ModalEditarFactura factura={modalEditar} onCerrar={() => setModalEditar(null)} onGuardado={() => { cargarDashboard(); }} onNavegar={navegar} />}
 
+      {/* OVERLAY MÓVIL */}
+      {isMobile && menuAbierto && (
+        <div onClick={() => setMenuAbierto(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.52)', zIndex: 49, backdropFilter: 'blur(2px)' }} />
+      )}
+
       {/* SIDEBAR */}
-      <aside style={{ width: `${SIDEBAR_FULL}px`, minWidth: `${SIDEBAR_FULL}px`, height: '100vh', position: 'sticky', top: 0, background: 'linear-gradient(180deg,#0f1f4b 0%,#1a2d6b 55%,#1e3a8a 100%)', display: 'flex', flexDirection: 'column', flexShrink: 0, overflow: 'hidden', zIndex: 10 }}>
+      <aside style={{ width: `${SIDEBAR_FULL}px`, minWidth: `${SIDEBAR_FULL}px`, height: '100vh', position: isMobile ? 'fixed' : 'sticky', top: 0, left: 0, background: 'linear-gradient(180deg,#0f1f4b 0%,#1a2d6b 55%,#1e3a8a 100%)', display: 'flex', flexDirection: 'column', flexShrink: 0, overflow: 'hidden', zIndex: 50, transform: isMobile ? (menuAbierto ? 'translateX(0)' : 'translateX(-100%)') : 'translateX(0)', transition: 'transform 0.28s cubic-bezier(0.4,0,0.2,1)' }}>
         <div style={{ padding: '1.1rem 0 0 0.7rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.25rem 0.8rem 1.3rem', overflow: 'hidden' }}>
             <img src={logo} alt="logo" style={{ width: '40px', height: '40px', objectFit: 'contain', mixBlendMode: 'screen', flexShrink: 0 }} />
@@ -983,12 +1000,20 @@ const Dashboard = () => {
       </aside>
 
       {/* CONTENIDO PRINCIPAL */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0, backgroundColor: BG, borderRadius: '24px 0 0 24px', boxShadow: '-4px 0 24px rgba(0,0,0,0.18)' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0, backgroundColor: BG, borderRadius: isMobile ? '0' : '24px 0 0 24px', boxShadow: isMobile ? 'none' : '-4px 0 24px rgba(0,0,0,0.18)', width: isMobile ? '100%' : undefined }}>
 
         {/* TOPBAR */}
-        <header style={{ height: '62px', backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1.5rem', boxShadow: '0 1px 0 rgba(0,0,0,0.06)', flexShrink: 0, borderRadius: '24px 0 0 0' }}>
+        <header style={{ height: '62px', backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1rem 0 1.5rem', boxShadow: '0 1px 0 rgba(0,0,0,0.06)', flexShrink: 0, borderRadius: isMobile ? '0' : '24px 0 0 0' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <h1 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', margin: 0 }}>{activeLabel}</h1>
+            {isMobile && (
+              <button onClick={() => setMenuAbierto(v => !v)} aria-label="Abrir menú"
+                style={{ width: '38px', height: '38px', borderRadius: '10px', border: 'none', background: menuAbierto ? '#eff6ff' : '#f1f5f9', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '5px', padding: '8px', flexShrink: 0, transition: 'background 0.15s' }}>
+                <span style={{ display: 'block', width: '18px', height: '2px', borderRadius: '2px', background: '#0f172a', transition: 'all 0.2s', transform: menuAbierto ? 'translateY(7px) rotate(45deg)' : 'none' }} />
+                <span style={{ display: 'block', width: '18px', height: '2px', borderRadius: '2px', background: '#0f172a', transition: 'all 0.2s', opacity: menuAbierto ? 0 : 1 }} />
+                <span style={{ display: 'block', width: '18px', height: '2px', borderRadius: '2px', background: '#0f172a', transition: 'all 0.2s', transform: menuAbierto ? 'translateY(-7px) rotate(-45deg)' : 'none' }} />
+              </button>
+            )}
+            <h1 style={{ fontSize: isMobile ? '1rem' : '1.2rem', fontWeight: '800', color: '#0f172a', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: isMobile ? '160px' : 'none' }}>{activeLabel}</h1>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             {/* ProfileMenu recibe fotoUrl del context — siempre sincronizado */}
@@ -1040,7 +1065,7 @@ const Dashboard = () => {
 
         {/* INICIO */}
         {activeNav === 'inicio' && (
-          <main style={{ flex: 1, overflowY: 'auto', padding: '1.4rem 1.5rem' }}>
+          <main style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '1rem 0.85rem' : '1.4rem 1.5rem' }}>
             {!tourVisto_DASH && <TourBienvenida_DASH onCerrar={cerrarTour_DASH} />}
             {mostrarEdu_DASH && <BannerEdu_DASH onClose={() => setMostrarEdu_DASH(false)} onVerTutorial={verTutorial_DASH} />}
             <BarraModoEdu_DASH onVerTutorial={verTutorial_DASH} />
@@ -1048,7 +1073,7 @@ const Dashboard = () => {
             {error && <div style={{ marginBottom: '1rem', padding: '0.85rem 1.1rem', backgroundColor: '#fef2f2', borderLeft: '4px solid #ef4444', borderRadius: '10px', color: '#b91c1c', fontSize: '0.87rem' }}>⚠️ {error}</div>}
 
             {/* STATS */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1.1rem', marginBottom: '1.4rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: '1.1rem', marginBottom: '1.4rem' }}>
               {[
                 { label: 'Facturado este Mes', value: formatMoney(stats?.facturado_mes), change: `${(stats?.variacion_facturado || 0) >= 0 ? '+' : ''}${stats?.variacion_facturado || 0}%`, changeLabel: 'vs mes anterior', color: '#2563eb', bg: '#eff6ff', icon: <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg> },
                 { label: 'Comprobantes Emitidos', value: String(stats?.comprobantes_pagados || 0), change: `+${stats?.comprobantes_pagados_mes || 0} este mes`, changeLabel: '', color: '#f59e0b', bg: '#fffbeb', icon: <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg> },
@@ -1081,14 +1106,15 @@ const Dashboard = () => {
                 </button>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '130px 1fr 108px 110px 100px 110px', padding: '0.5rem 1.4rem', borderBottom: '1px solid #f1f5f9' }}>
+              <div style={{ overflowX: 'auto' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '130px 1fr 108px 110px 100px 110px', padding: '0.5rem 1.4rem', borderBottom: '1px solid #f1f5f9', minWidth: '660px' }}>
                 {['Comprobante', 'Cliente', 'Fecha', 'Estado', 'Total', 'Acciones'].map(col => (
                   <span key={col} style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{col}</span>
                 ))}
               </div>
 
               {loading && Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} style={{ display: 'grid', gridTemplateColumns: '130px 1fr 108px 110px 100px 110px', padding: '0.9rem 1.4rem', alignItems: 'center', borderBottom: i < 3 ? '1px solid #f8fafc' : 'none', gap: '0.5rem' }}>
+                <div key={i} style={{ display: 'grid', gridTemplateColumns: '130px 1fr 108px 110px 100px 110px', padding: '0.9rem 1.4rem', alignItems: 'center', borderBottom: i < 3 ? '1px solid #f8fafc' : 'none', gap: '0.5rem', minWidth: '660px' }}>
                   <Skeleton h="14px" w="90px" /><Skeleton h="14px" /><Skeleton h="14px" w="80px" />
                   <Skeleton h="22px" w="80px" radius="99px" /><Skeleton h="14px" w="60px" />
                   <div style={{ display: 'flex', gap: '0.3rem' }}><Skeleton h="26px" w="26px" radius="7px" /><Skeleton h="26px" w="26px" radius="7px" /></div>
@@ -1111,7 +1137,7 @@ const Dashboard = () => {
                   <div key={f.id_factura}
                     onMouseEnter={() => setHoveredRow(i)}
                     onMouseLeave={() => setHoveredRow(null)}
-                    style={{ display: 'grid', gridTemplateColumns: '130px 1fr 108px 110px 100px 110px', padding: '0.8rem 1.4rem', alignItems: 'center', borderBottom: i < facturas.length - 1 ? '1px solid #f8fafc' : 'none', backgroundColor: hoveredRow === i ? '#f8fafc' : 'transparent', transition: 'background 0.15s' }}>
+                    style={{ display: 'grid', gridTemplateColumns: '130px 1fr 108px 110px 100px 110px', padding: '0.8rem 1.4rem', alignItems: 'center', borderBottom: i < facturas.length - 1 ? '1px solid #f8fafc' : 'none', backgroundColor: hoveredRow === i ? '#f8fafc' : 'transparent', transition: 'background 0.15s', minWidth: '660px' }}>
 
                     <span style={{ fontSize: '0.78rem', fontWeight: '700', color: '#64748b', fontFamily: 'monospace' }}>{f.numero_comprobante}</span>
 
@@ -1155,10 +1181,11 @@ const Dashboard = () => {
                   </div>
                 );
               })}
+              </div>{/* cierre overflowX wrapper */}
             </div>
 
             {/* CHARTS */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 310px', gap: '1.1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 310px', gap: '1.1rem' }}>
               <div style={{ backgroundColor: '#fff', borderRadius: '16px', padding: '1.2rem 1.4rem', boxShadow: '0 2px 12px rgba(0,0,0,0.05)', animation: 'fadeUp 0.5s ease 0.6s both' }}>
                 <h3 style={{ fontSize: '0.95rem', fontWeight: '800', color: '#0f172a', margin: '0 0 1.3rem' }}>Ingresos — Últimos 6 Meses</h3>
                 <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.85rem', height: '130px' }}>

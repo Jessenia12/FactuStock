@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 import { authService } from '../services/api';
 
 const API      = 'https://factustock-efdi.onrender.com/api';
@@ -232,6 +233,7 @@ const FormularioSoporte = ({ usuario }) => {
 
 /* ── COMPONENTE PRINCIPAL ───────────────────────────────── */
 const AyudaSoporte = () => {
+  const isMobile = useIsMobile();
   const usuario = authService.getCurrentUser();
   const userName = usuario ? `${usuario.nombres} ${usuario.apellidos}` : '';
   const TOUR_KEY = getTourKey(usuario?.id || usuario?.email || usuario?.username);
@@ -269,7 +271,7 @@ const AyudaSoporte = () => {
   const faqsFiltradas = FAQS.filter(cat => !categoriaActiva || cat.categoria === categoriaActiva);
 
   return (
-    <div style={{ padding: '1.8rem 2rem 2.5rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem 1.5rem' : '1.8rem 2rem 2.5rem', fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
       {!tourVisto && <TourBienvenida onCerrar={cerrarTour} userName={userName} />}
 
       {/* Barra modo educativo — siempre visible */}
@@ -290,7 +292,7 @@ const AyudaSoporte = () => {
 
       {tabActiva === 'ayuda' && (<>
         <Card titulo="Guía de Inicio Rápido" icono="🚀" acento="#15389a">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '0.75rem' }}>
             {GUIA_PASOS.map(p => (
               <div key={p.paso} style={{ background: '#f8fafc', borderRadius: '12px', padding: '0.9rem 1rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start', border: '1px solid #f1f5f9' }}>
                 <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.72rem', fontWeight: '900', color: 'white', flexShrink: 0 }}>{p.paso}</div>
@@ -305,7 +307,7 @@ const AyudaSoporte = () => {
 
         <Card titulo="Conceptos Tributarios" icono="🎓" acento="#2563eb" badge="EDUCATIVO">
           <p style={{ margin: '0 0 1rem', fontSize: '0.8rem', color: '#64748b', lineHeight: 1.5 }}>Definiciones y explicaciones clave sobre el sistema tributario ecuatoriano aplicadas al uso de FactuStock.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.85rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: '0.85rem' }}>
             {EDU_CONCEPTOS.map(c => <EduCard key={c.titulo} emoji={c.emoji} titulo={c.titulo} texto={c.texto} color={c.color} bg={c.bg} border={c.border} />)}
           </div>
         </Card>
@@ -341,7 +343,7 @@ const AyudaSoporte = () => {
         </Card>
 
         <Card titulo="Recursos Externos" icono="🔗" acento="#10b981">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.85rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '0.85rem' }}>
             {RECURSOS.map(r => (
               <div key={r.tipo} style={{ background: r.bg, borderRadius: '12px', padding: '1.1rem', border: `1.5px solid ${r.color}22`, display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
                 <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>{r.icono}</span>
@@ -411,7 +413,7 @@ const AyudaSoporte = () => {
       )}
 
       {tabActiva === 'soporte' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '1.1rem', alignItems: 'flex-start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 320px', gap: '1.1rem', alignItems: 'flex-start' }}>
           <Card titulo="Enviar Consulta al Docente" icono="✉️" acento="#2563eb">
             <FormularioSoporte usuario={usuario} />
           </Card>

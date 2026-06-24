@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { retencionesService, comprobantesRecibidosService, clientesService } from '../services/api';
 import ReactDOM from 'react-dom';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 /* ════════════════════════════════════════════════════════
    TOUR BIENVENIDA — Comprobante de Retención
@@ -195,6 +196,7 @@ const BarraModoEdu_RET = ({ onVerTutorial }) => (
    COMPONENTE PRINCIPAL
 ════════════════════════════════════════════════════════ */
 const ComprobanteRetencion = ({ onVolver }) => {
+  const isMobile = useIsMobile();
 
   // ── Tour educativo — primera visita ──────────────────────────────
   const [tourVisto_RET, setTourVisto_RET] = useState(
@@ -342,7 +344,7 @@ const ComprobanteRetencion = ({ onVolver }) => {
   // ── Pantalla de éxito ──
   if (exito) {
     return (
-      <div style={{ padding: '2rem', animation: 'fadeUp 0.4s ease both' }}>
+      <div style={{ padding: isMobile ? '1rem 0.85rem' : '2rem', animation: 'fadeUp 0.4s ease both' }}>
         <div style={{ background: 'white', borderRadius: '20px', padding: '2.5rem', textAlign: 'center', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
           <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: AMARILLO.light, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.2rem' }}>
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={AMARILLO.primary} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -350,7 +352,7 @@ const ComprobanteRetencion = ({ onVolver }) => {
           <h2 style={{ fontSize: '1.3rem', fontWeight: '800', color: '#0f172a', margin: '0 0 0.4rem' }}>¡Retención emitida!</h2>
           <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 1.5rem' }}>Comprobante <strong>{exito.numero_comprobante}</strong></p>
           <div style={{ background: AZUL.lighter, borderRadius: '12px', padding: '1rem 1.4rem', marginBottom: '1.5rem', textAlign: 'left', border: `1px solid ${AZUL.border}` }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.8rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr', gap: '0.8rem' }}>
               {[
                 { label: 'Proveedor',        value: exito.proveedor?.nombre },
                 { label: 'Fecha',            value: fmtFecha(exito.fecha_emision) },
@@ -417,7 +419,7 @@ const ComprobanteRetencion = ({ onVolver }) => {
   );
 
   return (
-    <div style={{ padding: '1.4rem 2rem', animation: 'fadeUp 0.3s ease both' }}>
+    <div style={{ padding: isMobile ? '1rem 0.85rem' : '1.4rem 2rem', animation: 'fadeUp 0.3s ease both' }}>
       {/* ── Tour educativo ── */}
       {!tourVisto_RET && <TourBienvenida_RET onCerrar={cerrarTour_RET} />}
       {mostrarEdu_RET && <BannerEdu_RET onClose={() => setMostrarEdu_RET(false)} onVerTutorial={verTutorial_RET} />}
@@ -620,7 +622,7 @@ const ComprobanteRetencion = ({ onVolver }) => {
       {/* PASO 3 — CONFIRMAR */}
       {paso === 3 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', animation: 'fadeUp 0.3s ease both' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1.2rem' }}>
             <div style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
               <h3 style={{ fontSize: '0.95rem', fontWeight: '800', color: '#0f172a', margin: '0 0 1.1rem' }}>Datos del Comprobante</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
