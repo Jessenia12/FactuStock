@@ -875,7 +875,7 @@ const Reportes = () => {
                   <span style={{ fontSize:'0.9rem', fontWeight:'900', color:ACCENT, textAlign:'right' }}>{fmtMoney(facturasList.reduce((s,f)=>s+parseFloat(f.total||0),0))}</span>
                 </div>
               </div>
-              </div>{/* cierre overflowX */}
+              </div>
             )}
           </div>
         </div>
