@@ -10,7 +10,7 @@ import DocTickets from './DocTickets';
 import DocActividad from './DocActividad';
 import GestionClientes from './GestionClientes';
 import GestionProductos from './GestionProductos';
-import ConfiguracionNegocio from './configuracionNegocio';
+import ConfiguracionNegocio from './ConfiguracionNegocio';
 import FacturasEmitidas from './FacturasEmitidas';
 import ComprobantesRecibidos from './ComprobantesRecibidos';
 import Reportes from './Reportes';
