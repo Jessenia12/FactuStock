@@ -7,10 +7,5 @@ passlib[bcrypt]==1.7.4
 python-dotenv==1.0.1
 pydantic[email]==2.7.1
 cryptography==42.0.7
+python-multipart==0.0.9
 
-
-
-
-cd backend
-venv\Scripts\activate
-uvicorn main:app --host 0.0.0.0 --port 8000
