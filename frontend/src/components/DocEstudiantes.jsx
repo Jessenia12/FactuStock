@@ -266,8 +266,7 @@ const ModalModulos = ({ estudiante, onClose, onGuardado }) => {
           </button>
         </div>
         <div style={{ padding: '1.4rem 1.6rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>Activa solo los módulos que <strong>{estudiante.nombres}</strong> debe ver en el sistema.</p>
-          {error && <div style={{ padding: '0.6rem 0.85rem', background: '#fef2f2', border: '1.5px solid #fca5a5', borderRadius: '8px', color: '#dc2626', fontSize: '0.8rem', fontWeight: '700' }}>⚠️ {error}</div>}
+          {error &&<div style={{ padding: '0.6rem 0.85rem', background: '#fef2f2', border: '1.5px solid #fca5a5', borderRadius: '8px', color: '#dc2626', fontSize: '0.8rem', fontWeight: '700' }}>⚠️ {error}</div>}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '0.4rem' }}>
             {Object.entries(MODULOS_INFO).map(([key, info]) => {
               const activo = modulos.includes(key);
